@@ -13,26 +13,25 @@ public class StatsPanel : MonoBehaviour
     we can add animation and stuff in here.
     
     */
-    Stats stats;
     public TextMeshProUGUI attackValue;
     public TextMeshProUGUI defValue;
     public TextMeshProUGUI critValue;
     public TextMeshProUGUI hpValue;
-    int price;
-    int usedIndex;
     public TextMeshProUGUI priceTxt;
     public Animator AttackValueAnimator;
     public Animator HpValueAnimator;
     public Animator DefenceValueAnimator;
     public Animator CriticalValueAnimator;
 
-void Start() {
+    int price;
+    int usedIndex;
+    Stats stats;
+    void Start() {
     updateText();
     Debug.Log(SaveSystem.LoadStats());
         IncreaseUsedIndex();
         price = 100 * usedIndex;
         priceTxt.text = "x"+price.ToString();
-        
     }
 
     public void updateText(){

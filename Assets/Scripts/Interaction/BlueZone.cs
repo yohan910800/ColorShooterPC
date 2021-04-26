@@ -9,7 +9,6 @@ public class BlueZone : Interactable
     int i;
     float timer;
     bool triggered;
-
     GameManager gm;
     Collider2D coll;
     SpriteRenderer sprite;
@@ -21,46 +20,11 @@ public class BlueZone : Interactable
         sprite = GetComponent<SpriteRenderer>();
         gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
         gm.WorldColorChange += OnWorldColorChange;
-
         OnWorldColorChange(gm.WorldColor);
-
-        //sprite.color = Color.blue;
-        //Color tmp = sprite.color;
-        //tmp.b = 200;
-        //tmp.g = -200;
-        //tmp.r = -200;
-        //tmp.a = -200;
-
-        //sprite.color = tmp;
-
     }
-
-    void Update()
-    {
-        //Log.log("triggereed name"+triggeredChara.GetGameObject().name+"basic speed "+ basicSpeed[i]);
-
-        //if (triggered == true)
-        //{
-        //    if (sprite.color == Color.blue)
-        //    {
-        //        triggeredChara[i].GetStats().SetSpeed(1.0f);
-
-        //    }
-        //    else if (sprite.color == Color.cyan)
-        //    {
-        //        triggeredChara[i].GetStats().SetSpeed(10.0f);
-        //    }
-        //}
-        //else
-        //{
-        //    //triggeredChara[i].GetStats().SetSpeed(basicSpeed[i]);
-        //}
-    }
-
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-
         if (sprite.color.g == 1)//Cyan
         {
             if (collision.GetComponent<ICharacter>() != null)
@@ -80,14 +44,12 @@ public class BlueZone : Interactable
 
     void OnTriggerExit2D(Collider2D collision)
     {
-            Log.log("exit");
         if (collision.GetComponent<ICharacter>() != null)
         {
             collision.gameObject.GetComponent<ICharacter>().GetStats().ResetSpeed();
             triggered = false;
         }
     }
-
     void OnWorldColorChange(Colors color)
     {
         if (color != Colors.Brown)
@@ -113,33 +75,24 @@ public class BlueZone : Interactable
             }
         }
     }
-
     Color Cyan()
     {
         Color tmp = sprite.color;
-
         tmp.r = 0.0f;
         tmp.g = 1f;
-
         tmp.b = 1f;
-
         tmp.a = 0.5f;
-
         return tmp;
     }
     Color Blue()
     {
         Color tmp = sprite.color;
-
         tmp.r = 0.0f;
         tmp.g = 0.0f;
-
         tmp.b = 1f;
-
         tmp.a = 0.5f;
         return tmp;
     }
-    
     void OnDestroy()
     {
         gm.WorldColorChange -= OnWorldColorChange;

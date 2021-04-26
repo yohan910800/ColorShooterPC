@@ -7,7 +7,6 @@ public class ChangeColorZone : MonoBehaviour
 {
     public PathFinderAI meleeEnemyScript;
     GameManager gm;
-
     void Start()
     {
         gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();

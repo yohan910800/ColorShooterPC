@@ -15,6 +15,12 @@ public class Weapon
     public int MagSize { get; protected set; }
     public float ReloadTime { get; protected set; }
     public int socketIndex { get; set; }
+    public float barrelLen;
+    // bonus
+    public int bonusIndex;
+    public bool doesItHaveDoubleShot = false;
+    public bool doesItHavePoisonBullet = false;
+
     protected int damage;
     protected float fireRate;
     protected string bulletName;
@@ -22,19 +28,12 @@ public class Weapon
     protected GameObject bulletPrefab;
     protected GameObject blankPrefab;
     protected float bulletSpeed;
-
     protected ICharacter owner;
     protected Colors bulletColor;
     protected bool isActive;
-    public float barrelLen;
     protected List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
     protected GameManager gm;
     protected GameObject particlePrefab;
-
-    // bonus
-    public int bonusIndex;
-    public bool doesItHaveDoubleShot = false;
-    public bool doesItHavePoisonBullet = false;
 
     Bullet bullet;
     GameObject bulletObj;
@@ -65,7 +64,6 @@ public class Weapon
             sr.sprite = sprite;
         }
     }
-
     public virtual void Deactivate()
     {
         isActive = false;

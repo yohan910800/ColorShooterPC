@@ -36,7 +36,6 @@ public class EditorInput : IInputModule {
     public Joystick joystick;
 
     public void Init() {
-        //joystick = GameObject.FindObjectOfType<Joystick>();
     }
 
     public void Update() {
@@ -53,8 +52,6 @@ public class EditorInput : IInputModule {
     // Updates the direction every frame
     void UpdateDirection() {
 
-        //if (joystick != null)
-        //{
         if (justOnceJoystick == false)
         {
             joystick = GameObject.FindObjectOfType<Joystick>();//tmp dosen't work on the init
@@ -63,7 +60,6 @@ public class EditorInput : IInputModule {
         }
         direction = new Vector2(joystick.Horizontal, joystick.Vertical);//yohan added
             
-        //direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 
     // Checks if the user is changing the color and triggers the OnColorSwitch event if true
@@ -99,52 +95,6 @@ public class EditorInput : IInputModule {
     {
         if (OnColorSwitch != null) OnColorSwitch(-1);
     }
-    //void ColorSwitchCheck()
-    //{
-
-    //    if (Input.touchCount > 1)
-    //    {
-    //        Touch touch1 = Input.GetTouch(1);
-
-    //        switch (touch1.phase)
-    //        {
-
-    //            case TouchPhase.Began:
-    //                touch1EnterPosition = touch1.position;
-    //                loopInhibiter = 0;
-    //                break;
-
-    //            case TouchPhase.Moved:
-
-    //                float minimumDistance = 10.0f;
-    //                float touchDistance = (touch1EnterPosition.x - touch1.position.x);
-
-    //                if (loopInhibiter == 0 && touchDistance < -minimumDistance && OnColorSwitch != null)
-    //                {
-    //                    Debug.Log("1");
-    //                    loopInhibiter = 1;
-    //                    if (OnColorSwitch != null) OnColorSwitch(1);
-    //                }
-    //                if (loopInhibiter == 0 && touchDistance > minimumDistance && OnColorSwitch != null)
-    //                {
-
-    //                    loopInhibiter = 1;
-    //                    if (OnColorSwitch != null) OnColorSwitch(-1);
-    //                }
-
-    //                break;
-
-    //            case TouchPhase.Ended:
-    //                loopInhibiter = 0;
-    //                break;
-
-    //        }
-
-    //    }
-
-    //    EdgeSwipeCheck();
-    //}
-
 
     void EdgeSwipeCheck()
     {

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MankindGames;
-
 public class RedZone : Interactable
 {
-    //public Colors color;
     int basicAttack;
     int i;
     int j;
@@ -18,83 +16,18 @@ public class RedZone : Interactable
     SpriteRenderer sprite;
     ICharacter player;
     List<ICharacter> triggeredChara=new List<ICharacter>();
-
     protected override void Start()
     {
         coll = GetComponent<Collider2D>();
         sprite = GetComponent<SpriteRenderer>();
         gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
         gm.WorldColorChange += OnWorldColorChange;
-       
         OnWorldColorChange(gm.WorldColor);
         sprite.color = Color.red;
     }
-
     void Update()
     {
         DisableAndEnableTriggerOnChangeColor();
-        //if (sprite.color == Red())
-        //{
-        //    if (playerGetDmg == true)
-
-        //    {
-        //        timer += Time.deltaTime;
-        //        if (timer > 0.5f)
-        //        {
-        //            player.GetGameObject().GetComponent<Player>().GetHit(5);
-        //        }
-        //    }
-        //}
-        //if (triggered == true)
-        //{
-        //    if (sprite.color == Red())
-        //    {
-        //        timer += Time.deltaTime;
-        //        if (timer > 0.5f)
-        //        {
-        //            foreach (ICharacter enemy in triggeredChara)
-        //            {
-        //                if (enemy.GetGameObject().name != "Player")
-        //                {
-        //                    if (enemy != null)
-        //                    {
-        //                        enemy.GetGameObject().GetComponent<Ranged1>().GetHit(5);
-        //                    }
-                            
-        //                }
-        //            }
-
-                    
-        //            timer = 0;
-        //        }
-        //    }
-        //    else if (sprite.color == Grey())
-        //    {
-        //        timer += Time.deltaTime;
-        //        if (timer > 0.5f)
-        //        {
-        //            foreach (ICharacter enemy in triggeredChara)
-        //            {
-        //                if (enemy.GetGameObject().name != "Player")
-        //                {
-        //                    if (enemy != null)
-        //                    {
-        //                        enemy.GetGameObject().GetComponent<Ranged1>().GetHeal(5);
-        //                    }
-
-        //                }
-                        
-        //            }
-
-                    
-        //            timer = 0;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    return;
-        //}
     }
 
     void DisableAndEnableTriggerOnChangeColor()
@@ -150,27 +83,9 @@ public class RedZone : Interactable
                             GetComponent<Player>().GetHeal(5);
                     }
                 }
-
                 timer = 0;
             }
         }
-    }
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        Log.log("in the red zone");
-        //if (collision.name == "Player")
-        //{
-        //    player = collision.gameObject.GetComponent<ICharacter>();
-        //    playerGetDmg = true;
-        //}
-        //triggeredChara.Add(collision.gameObject.GetComponent<ICharacter>());
-        
-        //triggered = true;
-    }
-    void OnTriggerExit2D(Collider2D collision)
-    {
-        //triggered = false;
-        //playerGetDmg = false;
     }
     void OnWorldColorChange(Colors color)
     {
@@ -197,33 +112,25 @@ public class RedZone : Interactable
             }
         }
     }
-
     Color Red()
     {
         Color tmp = sprite.color;
 
         tmp.r = 1.0f;
         tmp.g = 0.25f;
-
         tmp.b = 0.0f;
-
         tmp.a = 0.5f;
-
         return tmp;
     }
     Color Grey()
     {
         Color tmp = sprite.color;
-
         tmp.r = 0.80f;
         tmp.g = 0.80f;
-
         tmp.b = 0.80f;
-
         tmp.a = 0.5f;
         return tmp;
     }
-
     void OnDestroy()
     {
         gm.WorldColorChange -= OnWorldColorChange;

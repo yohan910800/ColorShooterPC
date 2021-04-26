@@ -22,10 +22,6 @@ public class FloatingDialogManager : MonoBehaviour
 
     float timer;
 
-    void Start()
-    {
-
-    }
 
     void Update()
     {
@@ -36,7 +32,6 @@ public class FloatingDialogManager : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= 2)
         {
-
             NextBtnPress();
             timer = 0;//tmp
         }
@@ -53,7 +48,6 @@ public class FloatingDialogManager : MonoBehaviour
         if (set == null) return null;
         isActive = true;
         ToNextLine();
-        //Static.Pause(true);
         dialogPanel.SetActive(true);
         return set;
     }
@@ -66,24 +60,10 @@ public class FloatingDialogManager : MonoBehaviour
             EndDialog();
             return;
         }
-        if (set.isInteractive && !currentLine.hasOptions)
-        {
-            //nextBtn.enabled = true;
-            //optionsPanel.SetActive(false);
-        }
-        else
-        {
-            //nextBtn.enabled = false;
-            //optionsPanel.SetActive(true);
-        }
+       
         nameTmp.SetText(currentLine.name);
         lineTmp.SetText(currentLine.line);
-        //if(currentLine.spriteName != null){
-        //    charImg.enabled = true;
-        //    charImg.sprite = Resources.Load<Sprite>("Sprites/Characters/Thumbnails/"+currentLine.spriteName);
-        //}else{
-        //    charImg.enabled = false;
-        //}
+       
     }
 
     public void NextBtnPress()

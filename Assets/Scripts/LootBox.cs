@@ -31,27 +31,24 @@ public class LootBox: MonoBehaviour {
     */
 
     //Variables
+    public GameObject LootText;
+    public GameObject LootPanel;
+    public GameObject gotItBtn;
+    public int credit;
 
     int[] creditList;
     Inventory inventory;
     string LootName;
-    public int credit;
 
     //For animation
     Sprite BoxSprite_opened;
     Sprite Boxsprite_closed;
     Image Boxsprite;
    RectTransform BoxSpriteTr;
-   public GameObject LootText;
-   public GameObject LootPanel;
-   public GameObject gotItBtn;
-
-    
 
     void Awake() {
         Init();
     }
-
     private void Init() {
         LoadResource();
         inventory = new Inventory(); //temp(Need save/load stats,inventory)
@@ -66,10 +63,7 @@ public class LootBox: MonoBehaviour {
         //
         Boxsprite= transform.Find("BoxSprite").GetComponent<Image>();
         BoxSpriteTr= transform.Find("BoxSprite").GetComponent<RectTransform>();
- 
         //
-
-
         creditList = new int[3]{
             50,
             100,
@@ -88,7 +82,6 @@ public class LootBox: MonoBehaviour {
     }
 
    private string RollDice() {
-        
         int dice = Random.Range(0, 100);
         if (dice < 20) 
             LootName = "Att+1";
@@ -100,11 +93,8 @@ public class LootBox: MonoBehaviour {
             LootName = "Pet";
         else 
             LootName = "DeleteEnemy";
-        
         return LootName;
-
     }
-
     private void OpenLoot(string LootName) {
 
         //addCredit---------------------------------------
@@ -119,30 +109,21 @@ public class LootBox: MonoBehaviour {
 
             case "Att+1"://implement 
                 break;
-
             case "HP+1":
                 break;
-
             case "Life+1":
                 break;
-
             case "Pet":
                 break;
-
             case "DeleteEnemy":
                 break;
-
             default:
                 Debug.Log("Encorrect LootName");
                 break;
-
         }
 
         Debug.Log(LootName + "\n Credit=" + inventory.Credits);
     }
-
-
-    
 
 public IEnumerator LootAnimation(){
         Boxsprite.sprite=Boxsprite_closed;
@@ -152,7 +133,6 @@ public IEnumerator LootAnimation(){
         Vector3 currentpos=BoxSpriteTr.localPosition;
         while (time <3f)
         {   
-          
             magnitude+=Time.deltaTime*5;
             float x = Random.Range(-1f, 1f) * magnitude;
             float y = Random.Range(-1f, 1f) * magnitude;

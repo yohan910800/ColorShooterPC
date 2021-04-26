@@ -11,6 +11,7 @@ public class OneHandRoundMeleeWeaponEnemyCombat : EnemyCombatV1
     public int[] ratios;
 
     public bool isHiting;
+    public GameObject handsContainer;
     float charge2;
     float charge3;
     float charge4;
@@ -23,10 +24,7 @@ public class OneHandRoundMeleeWeaponEnemyCombat : EnemyCombatV1
     GameObject stick;
     GameObject stickBullet;
     Vector3 curentPos;
-
-    public GameObject handsContainer;
     Weapon weap;
-
 
     public override void Init(ICharacter character)
     {
@@ -102,17 +100,4 @@ public class OneHandRoundMeleeWeaponEnemyCombat : EnemyCombatV1
             timerChangeColor = 0;
         }
     }
-    //bool OneHandShoot()
-    //{
-    //    bool shot = weap.Shoot(gameObject, aimDir);
-    //    if (shot) shotCount++;
-    //    if (weapon.MagSize > 0 && shotCount >= weapon.MagSize)
-    //    {
-    //        weapon.IsReloading = true;
-    //        shotCount = 0;
-    //        reloadCountdown = weapon.ReloadTime;
-    //        return false;
-    //    }
-    //    return shot;
-    //}
 }

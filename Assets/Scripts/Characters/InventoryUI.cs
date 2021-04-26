@@ -8,6 +8,10 @@ using System.Linq;
 
 public class InventoryUI : MonoBehaviour {
 
+
+    public GameObject buttonPrefab;
+    public bool isactive;
+
     Inventory inventory;
     Player player;
 
@@ -16,13 +20,8 @@ public class InventoryUI : MonoBehaviour {
     GameObject container;
     GameObject closePanel;
 
-    //TextMeshProUGUI creditsTmp;
-
-    public GameObject buttonPrefab;
-
     float buttonSize = 100;
     float separation = 5;
-    public bool isactive;
 
     List<Weapon> weapons = new List<Weapon>();
     List<Colors> colors = new List<Colors>();
@@ -33,11 +32,9 @@ public class InventoryUI : MonoBehaviour {
         container = transform.Find("Container").gameObject;
         weaponsPanel = container.transform.Find("WeaponsPanel").gameObject;
         colorsPanel = container.transform.Find("ColorsPanel").gameObject;
-        //creditsTmp = container.transform.Find("Credits").GetComponentInChildren<TextMeshProUGUI>();
         closePanel = transform.Find("ClosePanel").gameObject;
         weapons = inventory.Weapons;
         colors = inventory.BulletColors;
-
         int i = 0;
         foreach (Weapon w in inventory.Weapons){
             AddWeapon(i,w);
@@ -49,8 +46,6 @@ public class InventoryUI : MonoBehaviour {
             AddColor(i,c);
             i++;
         }
-
-        //UpdateCredits();
         CloseInventory();
     }
 
@@ -99,44 +94,26 @@ public class InventoryUI : MonoBehaviour {
         btn.onClick.AddListener(() => { DisplayBtnAfterClose(); });//yohan added
         RectTransform rt = btnObj.GetComponent<RectTransform>();
         rt.anchoredPosition = new Vector2((-buttonSize * (0.5f + i) - separation * (1 + i)-300), -500);
-        //Log.log("pos inventory " + rt.anchoredPosition);
-    }
-
-    void Start(){
-    }
-
-    //void UpdateCredits(){
-    //    creditsTmp.SetText(inventory.Credits.ToString());
-    //}
-
-    void Update(){
-        
     }
 
     void HideAll(){
 
     }
-
     public void OpenInventory(){
         UpdateItems();
-        //UpdateCredits();
         container.SetActive(true);
         closePanel.SetActive(true);
-        //Static.Pause(true);
     }
-
     public void CloseInventory(){
         container.SetActive(false);
         closePanel.SetActive(false);
         Static.Pause(false);
-
     }
     //yohan addeds
     // should be called on the CloseInventory() but doesn't work when the game start
     public void DisplayBtnAfterClose()
     {
         isactive = false;
-
         GameObject playerUI = GameObject.Find("PlayerStateUI(Clone)");
         playerUI.transform.Find("InventoryBtn").gameObject.SetActive(true);
     }

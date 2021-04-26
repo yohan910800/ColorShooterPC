@@ -15,8 +15,8 @@ public class TimerBeforStopGame : MonoBehaviour
 
     void Update()
     {
-        timerBeforeGoBackToHub -= Time.deltaTime /** 90*/;
-        txt.text = /*Mathf.Round(*/"" + (int)timerBeforeGoBackToHub;
+        timerBeforeGoBackToHub -= Time.deltaTime;
+        txt.text = "" + (int)timerBeforeGoBackToHub;
         if (timerBeforeGoBackToHub <= 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);

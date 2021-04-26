@@ -37,7 +37,6 @@ public class GameFinishController : MonoBehaviour
         timer= - 2.0f;
     }
 
-    // Update is called once per frame
     void Update()
     {
         maxCreditValue = gm.player.GetInventory().Credits;

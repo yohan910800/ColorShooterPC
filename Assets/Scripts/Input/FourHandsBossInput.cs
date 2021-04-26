@@ -11,16 +11,13 @@ public class FourHandsBossInput : MonoBehaviour,IInputModule
     public event Action<ICharacter> OnAimLock;
     public event Action<GameObject> OnTap;
 
-
     // Variables
-    //public bool isFrozen { get; set; }
     public int phase;
     public bool onPosition;
 
     int rnd;
     float time;
     float timeChoosePhase;
-
     float phaseDuration;
     float speed;
 

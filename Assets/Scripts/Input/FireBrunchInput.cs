@@ -14,19 +14,18 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
     // Variables
     public bool isFrozen { get; set; }
     public int phase;
+    public bool isAttacking;
+    public bool stopBurst = false;
     float dist;
     float timerBurst;
     float timerRest;
     bool pause = false;
-    public bool isAttacking;
-    public bool stopBurst = false;
     bool startCoroutineJustOnce = false;
     GameObject target;
     Vector2 direction;
     Vector3 targetLastPos;
     Vector2 originPos;
     ICharacter character;
-
     public void Init()
     {
         target = GameObject.Find("Player");
@@ -40,7 +39,6 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
 
     public void Update()
     {
-        Log.log("phase " +phase);
         UpdatePhase();
         UpdateDirection();
     }
@@ -48,18 +46,15 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
     {
         phase = character.phase;
     }
-
     public Vector2 GetDirection()
     {
         return direction;
-
     }
     void UpdateDirection()
     {
         switch (phase)
         {
             case 0:
-
                 break;
             case 1:
                 Burst();
@@ -69,13 +64,9 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
                 GoOnOriginPosition();
                 break;
             case 3:
-                //shootFire
                 break;
-
         }
-
     }
-
     void GoOnOriginPosition()
     {
         direction = (Vector3)originPos - transform.position;
@@ -86,12 +77,8 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
             character.phase = 3;
         }
     }
-   
-
-
     void Burst()
     {
-
         if (stopBurst == false)
         {
             if (isAttacking == false)
@@ -108,10 +95,8 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
 
             if (isAttacking == true)
             {
-
                 direction = (targetLastPos - transform.position);
                 gameObject.GetComponent<Character>().GetStats().SetSpeed(15);
-
                 timerBurst += Time.deltaTime;
 
                 if (timerBurst > 0.5f)
@@ -121,7 +106,6 @@ public class FireBrunchInput : MonoBehaviour, IInputModule
                 }
             }
         }
-
         else
         {
             return;

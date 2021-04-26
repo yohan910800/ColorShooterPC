@@ -11,15 +11,12 @@ public class ToggleMenu : MonoBehaviour
     public GameObject menuPanel;
     public GameObject MiddleGroup;
     bool showingMenu;
-
-
     public void ToggleMenus()
     {
         showingMenu = !showingMenu;
         menuPanel.SetActive(showingMenu);
         MiddleGroup.SetActive(!showingMenu);
     }
-
     public void ResetCondition()
     {
         showingMenu = false;

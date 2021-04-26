@@ -5,21 +5,17 @@ using MankindGames;
 
 public class Mine : Bullet
 {
-
     float lifeTime;
     float speed;
     float range;
-
     Vector3 direction;
     GameObject explosionEffect;
     AudioManager audioManager;
-    
     void Start()
     {
         Invoke("Terminate", lifeTime);
         audioManager = GameObject.Find("GameManager").GetComponent<GameManager>().audioManager;
     }
-
     public override void Init(ICharacter owner, Vector3 direction, float speed, int dmg, float range, Colors color, GameObject target = null)
     {
         Owner = owner;
@@ -37,12 +33,9 @@ public class Mine : Bullet
         owner = GameObject.Find("Player").GetComponent<ICharacter>();
         base.Init();
         explosionEffect = Resources.Load<GameObject>("Prefabs/Effects/MineExplodeEffect");
-
     }
-
     protected override void OnTriggerEnter2D(Collider2D other)
     {
-        
         ICharacter character = other.gameObject.GetComponent<ICharacter>();
         if (other.gameObject.layer == 10 || other.gameObject.layer == 12)
         {
@@ -50,7 +43,6 @@ public class Mine : Bullet
         }
         if (character != null)
         {
-            
             bool isHit = character.HitCheck(this);
             if (isHit)
             {
@@ -63,15 +55,7 @@ public class Mine : Bullet
                 {
                     character.isPoisoned = true;
                 }
-                //character.GetGameObject().GetComponent<Rigidbody2D>().
-                //    AddForce(Vector2.Reflect(character.GetAimDirection(),
-                //                     -character.GetAimDirection()
-                //                      ) * 0.009f, ForceMode2D.Impulse);
             }
-        }
-        else
-        {
-            //OnHit();//yohan added
         }
     }
     IEnumerator MineExploseSound(float duration)
@@ -87,9 +71,7 @@ public class Mine : Bullet
             {
                 audioManager.Play("MineExplosion");
             }
-
             timer += Time.deltaTime;
-
         }
         yield return null;
     }

@@ -5,19 +5,8 @@ using UnityEngine.UI;
 using MankindGames;
 using TMPro;
 using UnityEngine.SceneManagement;
-
 public class StateUI : MonoBehaviour
 {
-    
-    Stats stats;
-    Image hpBar;
-
-    Color tmp;
-
-    Color tmp2;
-    Color tmp3;
-    Color tmp4;
-
     public GameObject meleeAttackButton;
     public Image energyBar;
     public TextMeshProUGUI energyText;
@@ -28,11 +17,12 @@ public class StateUI : MonoBehaviour
 
     public GameObject randomSlot;// for bonus
     public GameObject caseWeapBonus;// for bonus
-    Image caseWeapBonusImg;
-    Image caseWeapBackgroundImg;
     public GameObject randomButton;// for bonus
     public GameObject rndBtnGoldBorder;// for bonus
     public GameObject colorBtn;// for bonus
+    public Color energyBarColor;
+    public Color energyTextColor;
+    public bool doesPlayerAlreayUseOneLife = false;
 
     Sprite tripleSingleShooterSprite;
     Sprite rifleSprite;
@@ -44,34 +34,34 @@ public class StateUI : MonoBehaviour
     Sprite doubleSprite;
     Sprite poisonSprite;
 
+    Stats stats;
+    Image hpBar;
+    Image caseWeapBonusImg;
+    Image caseWeapBackgroundImg;
 
+    Color tmp;
 
-    public Color energyBarColor;
-    public Color energyTextColor;
-    //public GameObject[] playerAlpha;
-    //public Color[] tmp;
+    Color tmp2;
+    Color tmp3;
+    Color tmp4;
 
     float timeLeft=0.0f;
     float timerSlot;//for bonus
 
     int bonusIndex;// for bonus
-    //public int tierIndex=0;// for bonus
     int rndNumIndex;
     int min = 1;
     int max = 4;
     List<int> alreadyTier = new List<int>();
     bool justOnceRndNum;
     bool justOncePressTheRndButton;
-
-
     bool isFixed;
     bool isItThePlayer;
     bool showingMenu;
     bool showingTestUi;//tmp
     bool activateRandomSlot;//for bonus
     bool justOnceAnim;
-
-    public bool doesPlayerAlreayUseOneLife=false;
+    
     ICharacter character;
     ICharacter player;
 
@@ -80,8 +70,6 @@ public class StateUI : MonoBehaviour
     GameObject target;
 
     //for tutorial 
-
-   
     bool activeTutorialErrorMessage = false;
     float timerTutorialErrorMessage;
     ///
@@ -89,12 +77,9 @@ public class StateUI : MonoBehaviour
     string[,] bonusNameArray=new string[5,200];//size tmp
 
     public void Init(ICharacter character, bool isItThePlayer, bool isFixed){
-
         this.character = character;
-        
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         hpBar = transform.Find("HpBar").GetComponent<Image>();
-
         if (isItThePlayer)
         {
             this.player = character;
@@ -144,16 +129,11 @@ public class StateUI : MonoBehaviour
              mineSprite = Resources.Load<Sprite>("Sprites/CaseUI/CaseMine64x64");
              doubleSprite = Resources.Load<Sprite>("Sprites/CaseUI/CaseDoubleShot64x64"); 
              poisonSprite = Resources.Load<Sprite>("Sprites/CaseUI/CasePoison64x64");
-
-
-           
         }
-        
         stats = character.GetStats();
         target = character.GetGameObject();
         this.isFixed = isFixed;
         this.isItThePlayer = isItThePlayer;
-        
         Refresh();
     }
     
@@ -181,8 +161,6 @@ public class StateUI : MonoBehaviour
                 {
                     activeTutorialErrorMessage = true;
                 }
-
-                
                 if (playerRef.justOnceTutorialRandomBtn == false)
                 {
                     
@@ -199,12 +177,11 @@ public class StateUI : MonoBehaviour
                         playerRef.justOnceTutorialRandomBtn = true;
                     }
                 }
-                if (/*player.GetGameObject().GetComponent<Player>()*/playerRef.didThePlayerOverComeTheArea6 == true
+                if (playerRef.didThePlayerOverComeTheArea6 == true
                     && playerRef.meleeBtnPressedForTheFirsTime == true)
                 {
                     if (player.GetStats().Energy >= 50)
                     {
-
                         player.GetStats().LoseEnergy(50);//tmp
                         Refresh();
                         activateRandomSlot = true;
@@ -213,7 +190,6 @@ public class StateUI : MonoBehaviour
                         gm.audioManager.Play("rndSlot1");
                         justOncePressTheRndButton = true;
                         randomSlot.SetActive(true);
-
                     }
                 }
                 
@@ -230,8 +206,6 @@ public class StateUI : MonoBehaviour
                 randomSlot.SetActive(true);
 
             }
-           
-            
         }
     }
     
@@ -256,7 +230,6 @@ public class StateUI : MonoBehaviour
                 bonusIndex = ChooseRndNumber();
                 justOnceRndNum = true;
             }
-            //Log.log("Bonus index " + bonusIndex);
             randomSlot.GetComponent<Animator>().SetBool("SlotRandom", true);
             randomSlot.GetComponent<TextMeshProUGUI>().text = 
                 bonusIndex.ToString()+ "\n"+ bonusNameArray[playerRef.tierIndex,bonusIndex];
@@ -272,9 +245,7 @@ public class StateUI : MonoBehaviour
             player.GetGameObject().GetComponent<PlayerCombatV1>().
                 TierRandomNumber(playerRef.tierIndex,bonusIndex);
             //reset the button    
-            //randomSlot.SetActive(false);
             playerRef.tierIndex++;
-            //Log.log("tierindex " +playerRef.tierIndex);
             timerSlot = 0.0f;
             activateRandomSlot = false;
             caseWeapBonus.SetActive(false);
@@ -285,7 +256,6 @@ public class StateUI : MonoBehaviour
 
     int ChooseRndNumber()
     {
-        
         int theTired = Random.Range(min, max);
         while (alreadyTier.Contains(theTired))
             theTired = Random.Range(min, max);
@@ -310,20 +280,16 @@ public class StateUI : MonoBehaviour
                     case 1:
                         caseWeapBonusImg.sprite = tripleSingleShooterSprite;
                         caseWeapBackgroundImg.color = Color.yellow;
-                        //Log.log("display triple");
                         break;
                     case 2:
                         caseWeapBonusImg.sprite = rifleSprite;
                         caseWeapBackgroundImg.color = Color.yellow;
-                        //Log.log("display rifle");
                         break;
                     case 3:
                         caseWeapBonusImg.sprite = shotgunSprite;
                         caseWeapBackgroundImg.color = Color.yellow;
-                        //Log.log("display shotgun");
                         break;
                 }
-
                 break;
             case 1:
                 CheckWichBonusCaseShouldBeDisplayed();
@@ -353,9 +319,7 @@ public class StateUI : MonoBehaviour
                 break;
             case 4:
                 break;
-
         }
-
     }
     void CheckWichBonusCaseShouldBeDisplayed()
     {
@@ -380,23 +344,11 @@ public class StateUI : MonoBehaviour
         }
     }
 
-
-
     void Update() {
         
         if (isItThePlayer)
         {
             Player playerRef = player.GetGameObject().GetComponent<Player>();
-            //Log.log("stateui just once " + playerRef.justOnceTutorialRandomBtn);
-            //Log.log("stateui overcome area 6 " + player.GetGameObject().GetComponent<Player>().didThePlayerOverComeTheArea6);
-            //Log.log("stateui meleebtnpressedforfirsttime " + playerRef.meleeBtnPressedForTheFirsTime);
-            //Log.log("stateui just once " + playerRef.justOnceTutorialRandomBtn);
-            // Log.log("enable condition " + ReEnablePlayerBodyCondition);
-            //if(ReEnablePlayerBodyCondition == true)
-            //{
-            //     ReEnablePlayer();
-            //}
-
             UpdateRandomBtnColor();
             if (activateRandomSlot==true)
             {
@@ -406,13 +358,11 @@ public class StateUI : MonoBehaviour
             {
                 randomSlot.SetActive(false);
             }
-
             UpdateTuotorialErrorMessage();
             UpdateMeleeAttackBtnDisplay();
             DisableJoystickIfMeleeMode();//yohan added
             ReturnMeleeAttackBtnOnBasicColor();//yohan added
         }
-
         if (!isFixed) Move();
     }
     void UpdateTuotorialErrorMessage()
@@ -432,7 +382,6 @@ public class StateUI : MonoBehaviour
                 GameObject.Find("TutorialUI").
                 transform.Find("RndBtnErrorMessageTXT").gameObject.SetActive(true);
             }
-
         }
         else
         {
@@ -441,43 +390,18 @@ public class StateUI : MonoBehaviour
     }
     void UpdateRandomBtnColor()
     {
-        //if (SceneManager.GetActiveScene().name != "Tutorial")
-        //{
-            if (player.GetStats().Energy >= 50)
-            {
-                rndBtnGoldBorder.SetActive(true);
-                randomButton.GetComponent<Animator>().SetBool("EnergyHigherThan50", true);
-                randomButton.GetComponent<Image>().color = Color.white;
-            }
-            else
-            {
-                rndBtnGoldBorder.SetActive(false);
-                randomButton.GetComponent<Animator>().SetBool("EnergyHigherThan50", false);
-                randomButton.GetComponent<Image>().color = Color.grey;
-            }
-        //}
-        //else
-        //{
-        //    if (player.GetStats().Energy >= 50)
-        //    {
-
-        //        if (player.GetGameObject().GetComponent<Player>()
-        //            .didThePlayerOverComeTheArea6 == true)
-        //        {
-        //            rndBtnGoldBorder.SetActive(true);
-        //        }
-        //        randomButton.GetComponent<Animator>().SetBool("EnergyHigherThan50", true);
-        //        randomButton.GetComponent<Image>().color = Color.white;
-
-        //    }
-        //    else
-        //    {
-        //        rndBtnGoldBorder.SetActive(false);
-        //        randomButton.GetComponent<Animator>().SetBool("EnergyHigherThan50", false);
-        //        randomButton.GetComponent<Image>().color = Color.grey;
-
-        //    }
-        //}
+        if (player.GetStats().Energy >= 50)
+        {
+            rndBtnGoldBorder.SetActive(true);
+            randomButton.GetComponent<Animator>().SetBool("EnergyHigherThan50", true);
+            randomButton.GetComponent<Image>().color = Color.white;
+        }
+        else
+        {
+            rndBtnGoldBorder.SetActive(false);
+            randomButton.GetComponent<Animator>().SetBool("EnergyHigherThan50", false);
+            randomButton.GetComponent<Image>().color = Color.grey;
+        }
     }
     void UpdateMeleeAttackBtnDisplay()
     {
@@ -516,9 +440,7 @@ public class StateUI : MonoBehaviour
             if (character.GetStats().Energy == 0)
             {
                 energyBar.GetComponent<Image>().color = tmp;
-                //tmp2.a = 255;
                 energyText.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
-                //energyText.GetComponent<TextMeshProUGUI>().color = Color.black;
             }
     }
     //yohan added
@@ -553,11 +475,9 @@ public class StateUI : MonoBehaviour
     //yohan added
     public void UpdateCredits()
     {
-        //Log.log("c" + GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().GetInventory().Credits.ToString());
         creditsTmp.SetText(player.GetInventory().Credits.ToString());
         creditsTmp.GetComponent<Animator>().SetTrigger("ActiveGetCoinAnim");
     }
-
     //yohan added
     public void ToggleMenu()
     {
@@ -565,7 +485,6 @@ public class StateUI : MonoBehaviour
         menuPanel.SetActive(showingMenu);
         meleeAttackButton.SetActive(!showingMenu);
         colorBtn.SetActive(!showingMenu);
-
         Static.Pause(showingMenu);
     }
 
@@ -573,29 +492,24 @@ public class StateUI : MonoBehaviour
     {
         showingTestUi = !showingTestUi;
         testUI.SetActive(showingTestUi);
-
     }
     //yohan added 
-
     public void Replay()
     {
-        
         player = GameObject.Find("Player").GetComponent<Player>();
         GameObject.Find("Player").GetComponent<PlayerCombatV1>().enabled = true;
         GameObject.Find("Player").GetComponent<MovementV1>().enabled = true;
         GameObject.Find("Player").GetComponent<BoxCollider2D>().enabled = true;
         if (GameObject.FindGameObjectWithTag("Boss") != null|| GameObject.FindGameObjectWithTag("FourHandsBoss") != null)
         {
-            GameObject.Find(/*"GameManager"*/"AudioManager").GetComponent<AudioManager>().Play("BossBgm");
+            GameObject.Find("AudioManager").GetComponent<AudioManager>().Play("BossBgm");
         }
         else
         {
-            GameObject.Find(/*"GameManager"*/"AudioManager").GetComponent<AudioManager>().Play("MainBgm");
+            GameObject.Find("AudioManager").GetComponent<AudioManager>().Play("MainBgm");
         }
-
         player.deadEffectObj.SetActive(false);
         player.deadEffectAnimObj.SetActive(false);
-
         foreach (GameObject partOfBody in player.playerMainBody)
         {
             partOfBody.SetActive(true);
@@ -606,16 +520,12 @@ public class StateUI : MonoBehaviour
         {
             Time.timeScale = 1;
             player.GetHeal(100);
-            //Refresh();
             player.activeInvisible = true;
             player.GetInventory().RemoveLife(1);
             Destroy(GameObject.Find("GameOverPanel(Clone)"));
             Destroy(GameObject.Find("NoLifeGameOverPanel(Clone)"));
         }
-        
     }
-    
-
     public void GoBackToHub()
     {
         Time.timeScale = 1;
@@ -652,7 +562,6 @@ public class StateUI : MonoBehaviour
         energyText.GetComponent<TextMeshProUGUI>().fontStyle=FontStyles.Bold;
         energyText.GetComponent<TextMeshProUGUI>().color=Color.red;
     }
-
      void HpBarGetRedOnLowHP()
     {
         if (hpBar != null)
@@ -674,18 +583,12 @@ public class StateUI : MonoBehaviour
             }
         }
     }
-
     public void ColorChangeButton()
     {
-
         gm.NextColor(1);
     }
-
     public void OnDeath()
     {
         if (!isFixed) Destroy(gameObject);
     }
-
-
-   
 }
