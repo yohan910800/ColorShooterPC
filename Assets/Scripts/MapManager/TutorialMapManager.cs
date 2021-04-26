@@ -19,8 +19,6 @@ public class TutorialMapManager : MapManager
     public List<GameObject> enemyInTheArea=new List<GameObject>();
 
     public GameObject permanentWall;//get an invisible wall permanent wall wich prevent the player from going back to the village
-    //public int enemyDeadCount;//this variable count the number of enemy dead in the map 
-    
 
     GameObject tutorialUI;
     GameObject fingerColor;
@@ -37,9 +35,9 @@ public class TutorialMapManager : MapManager
     int att = 1;
     int dropedEnergy;
     int dropedCredits;
-    float meleeAttackEnemyScale = 1;
     int phaseoffset;
-    // Start is called before the first frame update
+    float meleeAttackEnemyScale = 1;
+    
     protected override void Start()
     {
         base.Start();
@@ -107,8 +105,6 @@ public class TutorialMapManager : MapManager
     }
     private void Update()
     {
-        //Log.log("phase " + phase);
-        //Log.log("phaseOfsset " + phaseoffset);
         //turn that into a coroutine later
         if (phase == 2)
         {
@@ -120,14 +116,11 @@ public class TutorialMapManager : MapManager
         switch (phase)
         {
             case 0://Area1
-
                 killEnemyText.SetActive(true);
-                
                 for (int i = 0; i < 2; i++)
                 {
                     SpawnEnemyTutorial(0,spawnerPoints[0].position+new Vector3(3.0f*i,0.0f,0.0f) );
                 }
-                
                 MoveTriggerZoneToTheNextPosition(0);
                 break;
             case 1://Area2
@@ -137,19 +130,9 @@ public class TutorialMapManager : MapManager
                     SpawnEnemyDistanceShoot(1, spawnerPoints[2].position+new Vector3(2.0f * i, 0.0f,0.0f));
                 }
                 SpawnEnemyTutorial(0, spawnerPoints[1].position + new Vector3(2.0f , 0.0f, 0.0f));
-                
-
                 MoveTriggerZoneToTheNextPosition(2);// phase 2 deleted
                 break;
             case 2://Area3
-
-                
-                //for (int i = 0; i < 2; i++)
-                //{
-                //    SpawnEnemyTutorial(0, spawnerPoints[3].position);
-                //}
-
-                //MoveTriggerZoneToTheNextPosition(2);
                 break;
 
             case 3://Area4
@@ -177,12 +160,9 @@ public class TutorialMapManager : MapManager
                 player.didThePlayerOverComeTheArea6 = true;
                 GameObject.Find("TriggerTutoriialGroup").transform.GetChild(5)
                     .GetComponent<TutorialUIController>().stopTimeUIElement.SetActive(true);
-
                 for (int i = 0; i < 5; i++)
                 {
                     SpawnEnemyTutorialHightHP(0, spawnerPoints[8].position+new Vector3(2.0f*(i/2),0.0f,0.0f));
-                    //SpawnEnemyTutorial(1, spawnerPoints[8].position);
-                    //SpawnEnemyTutorial(1, spawnerPoints[9].position);
                 }
                 MoveTriggerZoneToTheNextPosition(5);
                 break;
@@ -196,19 +176,14 @@ public class TutorialMapManager : MapManager
                     SpawnEnemyDistanceShoot(1, spawnerPoints[9].position);
                     SpawnEnemyDistanceShoot(1, spawnerPoints[10].position);
                 }
-
                 MoveTriggerZoneToTheNextPosition(6);
                 break;
 
-
-
             case 7://Area9
-
                 for (int i = 0; i < 2; i++)
                 {
                     SpawnEnemyTutorialHightHP(0, spawnerPoints[11].position+new Vector3(2.0f*i,0.0f,0.0f));
                 }
-
                 MoveTriggerZoneToTheNextPosition(7);
                 break;
             case 8://Area10
@@ -216,8 +191,6 @@ public class TutorialMapManager : MapManager
                 {
                     SpawnEnemyTutorialHightHP(0, spawnerPoints[12].position+ new Vector3(2.0f * i, 0.0f, 0.0f));
                 }
-
-
                 MoveTriggerZoneToTheNextPosition(8);
                 break;
             case 9://Area11
@@ -230,7 +203,6 @@ public class TutorialMapManager : MapManager
                 {
                     SpawnEnemyDistanceShoot(1, spawnerPoints[13].position);
                 }
-
                 MoveTriggerZoneToTheNextPosition(9);
                 break;
             case 10://Area12
@@ -244,12 +216,10 @@ public class TutorialMapManager : MapManager
                     SpawnEnemyDistanceShoot(1, spawnerPoints[16].position);
                     SpawnEnemyDistanceShoot(1, spawnerPoints[17].position);
                 }
-
                 MoveTriggerZoneToTheNextPosition(10);
                 break;
 
             case 11://Area13
-
                 for (int i = 0; i < 6; i++)
                 {
                     SpawnEnemyTutorialHightHP(0, spawnerPoints[18].position + new Vector3(i, 0.0f, 0.0f));
@@ -259,7 +229,6 @@ public class TutorialMapManager : MapManager
                     SpawnEnemyDistanceShoot(1, spawnerPoints[19].position);
                     SpawnEnemyDistanceShoot(1, spawnerPoints[20].position);
                 }
-
                 MoveTriggerZoneToTheNextPosition(11);
                 break;
             case 12://Area14
@@ -305,12 +274,10 @@ public class TutorialMapManager : MapManager
 
     public IEnumerator PresentBoss(float duration)
     {
-
         float time = 0.0f;
         bool justOnceBossName = false;
         while (time < duration+2)
         {
-            
             if (time < duration)
             {
                 player.GetComponent<MovementV1>().enabled = false;
@@ -322,13 +289,10 @@ public class TutorialMapManager : MapManager
                     bossNameUI.SetActive(true);
                     justOnceBossName = true;
                 }
-
-
             }
             else
             {
                 GameObject.Find("MainCamera").GetComponent<CameraControl>().enabled = true;
-
                 GameObject.Find("MainCamera").GetComponent<Animator>().enabled = false;
 
                 bossNameUI.SetActive(false);
@@ -338,13 +302,10 @@ public class TutorialMapManager : MapManager
             time += Time.deltaTime;
             yield return null;
         }
-
-
     }
     void SpawnEnemyTutorial(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
-        enemyScale = new Vector3(/*meleeAttackEnemyScale*/1.5f, 1.5f/*meleeAttackEnemyScale*/, 1.0f);
+        enemyScale = new Vector3(1.5f, 1.5f, 1.0f);
         enemyAttack = att;
         enemySpeed = 4.0f;
         enemyMaxHP = 20;
@@ -357,8 +318,7 @@ public class TutorialMapManager : MapManager
     }
     void SpawnEnemyDistanceShoot(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
-        enemyScale = new Vector3(/*meleeAttackEnemyScale*/1.5f, 1.5f/*meleeAttackEnemyScale*/, 1.0f);
+        enemyScale = new Vector3(1.5f, 1.5f, 1.0f);
         enemyAttack = att;
         enemySpeed = 1.0f;
         enemyMaxHP = 20;
@@ -370,7 +330,6 @@ public class TutorialMapManager : MapManager
     }
     void SpawnEnemyTutorialHightHP(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
         enemyScale = new Vector3(2.0f, 2.0f, 1.0f);
         enemyAttack = 1;
         enemySpeed = 4.0f;
@@ -383,7 +342,6 @@ public class TutorialMapManager : MapManager
     }
     void SpawnTutorialBoss(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
         enemyScale = new Vector3(3.0f, 3.0f, 1.0f);
         enemyAttack = 4;
         enemySpeed = 4.0f;

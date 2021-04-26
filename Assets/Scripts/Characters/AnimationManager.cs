@@ -15,6 +15,10 @@ public class AnimationManager : MonoBehaviour {
     public Sprite meleeHandSprite;
 
     public Animator animator;
+
+    public Hand hand1;
+    public Hand hand2;
+
     ICharacter character;
     IInputModule input;
 
@@ -24,21 +28,15 @@ public class AnimationManager : MonoBehaviour {
     SpriteRenderer foot2Renderer;
     SpriteRenderer hairRenderer;
     SpriteRenderer meleeHandRenderer;
-
-    public Hand hand1;
-    public Hand hand2;
+    
     Hand[] hands;
     
-
     Vector3 dir;
     float testangle;
     bool isInitialized;
-
     
     Orientation orientation;
     Weapon weapon;
-
-    
 
     public void Init() {
         animator = GetComponent<Animator>();
@@ -116,13 +114,8 @@ public class AnimationManager : MonoBehaviour {
         {
             SpriteUpdate();
             AnimationUpdate();
-            //hand2.isEmpty = false;
-            //Log.log("aim dir "+dir);
-            //Log.log("is enpty " + hand2.isEmpty);
         }
     }
-
-    
 
     void AnimationUpdate(){
         dir = input.GetDirection();
@@ -132,7 +125,6 @@ public class AnimationManager : MonoBehaviour {
             animator.SetBool("isWalking",true);
         }
     }
-
 
     Orientation GetOrientation(){
         

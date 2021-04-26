@@ -5,6 +5,13 @@ using UnityEngine.Advertisements;
 
 public class AddManager : MonoBehaviour
 {
+
+    /*
+     * will be set at after the save system is done 
+     */
+
+
+
     private string store_id = /*"3921875"*/"3913601";
 
     //void Awake()

@@ -9,19 +9,24 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 //-----------------------------
 public class Player : Character {
-    Transform[] singleSocket;
-    Transform[] singleSocket2;
-    Transform[] dualWieldSockets;
-
     [HideInInspector]
     public InventoryUI inventoryUI;
     public StateUI stateUIFixe;
     public GameObject stateUIPrefabFixe;
     public GameObject stateUII;
-    ////added_dohan------------------
+    
+    public GameObject[] runSmokeEffect;
+    public GameObject[] runSmokeEffectOrange;
 
-    //public GameObject shopInteractionObj;
-    //ShopInteraction shopInteraction;
+    public bool justOnceTutorialRandomBtn;
+    public int tierIndex;// for bonus
+    public bool meleeBtnPressedForTheFirsTime = false;
+    public bool initiated = false;
+
+    Transform[] singleSocket;
+    Transform[] singleSocket2;
+    Transform[] dualWieldSockets;
+
     Transform directionIndication;
     const float directionIndicationDistance = 4;
     Transform sprite;
@@ -29,10 +34,7 @@ public class Player : Character {
     SpriteRenderer directionIndicationSprite;
     Color dIColor;
     GameObject gainEnergyEffect;
-    //GameObject runSmokeEffect;
-    //GameObject runSmokeEffectOrange;
-    public GameObject[] runSmokeEffect;
-    public GameObject[] runSmokeEffectOrange;
+
     bool[] justOnceSmoke;
     float transparency;
 
@@ -43,9 +45,7 @@ public class Player : Character {
     // for tutorial
     public bool didThePlayerOverComeTheArea6 = false;
     GameObject gameFinishPanel;
-
     ////-----------------------------
-
     //public SaveSystemManager saveSystemManager;
 
     //AutoSaveData autoSaveData;
@@ -54,8 +54,6 @@ public class Player : Character {
     //public GameObject MapManagerObj;
     //public GameObject triggerzone;
 
-    public bool initiated = false;
-
     PlayerCombatV1 playerComb;
 
     float timerInvisible;
@@ -63,14 +61,8 @@ public class Player : Character {
     bool jsutOnceInstantiateGameOverPanel;
     bool justOnceDisablePlayerBody;
 
-
-    public bool justOnceTutorialRandomBtn;
-    public int tierIndex ;// for bonus
-    public bool meleeBtnPressedForTheFirsTime = false;
-
     BoxCollider2D weaponColl1;
     BoxCollider2D weaponColl2;
-
 
     public override void Init() {
         base.Init();
@@ -119,7 +111,6 @@ public class Player : Character {
         directionIndication = transform.Find("DirectionIndication");
         sprite = directionIndication.transform.Find("DirectionSprite");
         directionIndicationSprite = sprite.GetComponent<SpriteRenderer>();
-        //dIColor = directionIndicationSprite.color;
 
         //5. State UI init( hp bar etc )
         GameObject stateUIInstanceFixe = Instantiate(stateUIPrefabFixe,/*Vector3.Zero*/ 
@@ -127,16 +118,10 @@ public class Player : Character {
         stateUIFixe = stateUIInstanceFixe.GetComponentInChildren<StateUI>();
         stateUIFixe.Init(this, true, true);// character, hasEnergy, isFixed
 
-        //GetInventory().AddCredits(10);//tmp
         stateUIFixe.UpdateCredits();//tmp
 
         //6.VFX init
         gainEnergyEffect = Resources.Load<GameObject>("Prefabs/Effects/DropEnergyEffect");
-        //runSmokeEffect = Resources.Load<GameObject>("Prefabs/Effects/RunEffect");
-        //runSmokeEffectOrange = Resources.Load<GameObject>("Prefabs/Effects/RunEffectOrange");
-
-        //playerComb = GetComponent<PlayerCombatV1>();
-        //playerComb.weapons[0] = GetActiveWeapon();//^======
         justOnceSmoke = new bool[2];
 
         //7. etc 
@@ -147,16 +132,10 @@ public class Player : Character {
         initiated = true;
         stateUII = GameObject.Find("PlayerStateUI(Clone)");
         stateUII.GetComponent<StateUI>().Refresh();
-        //bonus
-        //GetComponent<PlayerCombatV1>().weapons[0] = GetActiveWeapon();
-        justOnceSmoke = new bool[2];
-        //GetActiveWeapon().GetBullet().GetComponent<Bullet>().doesPoisonedBulletIsActivate = false;
-        //GetStats().GainEnergy(100);
-        //stateUI.Refresh();//test
-        //Log.log("name " + MapManagerObj.name);
-        
+
+
         //9. initate player die effect
-        deadEffectObj= transform.Find("DeadEffect").gameObject;
+        deadEffectObj = transform.Find("DeadEffect").gameObject;
         deadEffectAnimObj= transform.Find("DeadEffectAnim").gameObject;
         playerDeadBody = GameObject.Find("Player").transform.Find("PlayerDeadBody").gameObject;
 
@@ -238,37 +217,13 @@ public class Player : Character {
         tierIndex = tierNum;
     }
 
-    //public void ActivateWeapon1(Weapon weapon)
-    //{
-    //    ActivateWeapon(weapon);
-    //    weaponColl2.offset = new Vector2(weapon.barrelLen + 0.2f, 0);
-    //    weaponColl2.radius = weapon.barrelLen;
-
-
-    //}
-    //public void ActivateWeapon2(Weapon weapon2)
-    // {
-    //     weapon2.Init(this, singleSocket2);
-    //     AddWeapon(weapon2);
-    //     ActivateAllWeapons(weapon2);
-    //     weaponColl1.offset = new Vector2(weapon2.barrelLen + 0.2f, 0);
-    //     weaponColl1.radius = weapon2.barrelLen;
-    // }
-
-
     protected override void Update() {
-
-        
-        //GetStats().GainEnergy(100);
-        //Log.log("inventory size " + inventory.Weapons.Count);
-        //Log.log("life  " + GetInventory().Life);
 
         input.Update();
         DirectionIndication();
         PlayRunSoundAndSmokeEffect();
 
         DisableActiveInvisible();
-        //Log.log("active panel " +stateUI.doesPlayerAlreayUseOneLife);
     }
 
     void PlayRunSoundAndSmokeEffect()
@@ -296,7 +251,6 @@ public class Player : Character {
         {
             justOnceSmoke[i] = false;
         }
-
 
         timerSmoke += Time.deltaTime;
         if (timerSmoke >= 0.4f)
@@ -332,7 +286,6 @@ public class Player : Character {
         stateUI.Refresh();
         stateUIFixe.Refresh();//added yohan
         PlayGetHitSound();
-        //stateUI.RefreshPlayerAlpha();
         if (stats.HP == 0 && IsAlive){
             OnDeath();
         }
@@ -361,25 +314,6 @@ public class Player : Character {
             }
         }
     }
-    //public void GetHeal(int heal)
-    //{
-
-    //    stats.Heal(heal);
-    //    stateUI.Refresh();
-    //    stateUIFixe.Refresh();//added yohan
-    //    //stateUI.RefreshPlayerAlpha();
-    //    if (stats.HP == 0 && IsAlive)
-    //    {
-    //        OnDeath();
-    //    }
-    //    if (gm.showDamageText)
-    //    {
-    //        var gObj = Instantiate(damageTextPrefab, transform.position, Quaternion.identity) as GameObject;
-    //        DamageText dt = gObj.GetComponent<DamageText>();
-    //        dt.Init(heal, Color.green);
-    //    }
-    //    audioManager.Play("Heal1");
-    //}
 
     public void DirectionIndication()
     {
@@ -400,7 +334,6 @@ public class Player : Character {
             {
                 directionIndicationSprite.transform.localScale += scale;
             }
-
         }
         else
         {
@@ -421,22 +354,11 @@ public class Player : Character {
         }
         directionIndicationSprite.color = new Color(0, 0.7f, 1, transparency);
     }
-
-    //void SmokeDirection()
-    //{
-    //    Vector3 direction = input.GetDirection();
-    //    direction = direction.normalized;
-    //    foreach (GameObject smoke in runSmokeEffect)
-    //    {
-    //        smoke.transform.right = direction;
-    //    }
-    //}
-    
     public override bool HitCheck(Bullet bullet){
         if (isInvincible == false)
         {
             ICharacter character = bullet.Owner;
-            if (character != null && character.IsAlive && character.GetGameObject().name!="Player"/*character.GetGameObject().tag != "Player"*/)
+            if (character != null && character.IsAlive && character.GetGameObject().name!="Player")
             {
                 int damage = color == 
                     bullet.BulletColor ? bullet.Damage : bullet.Damage * Static.colorDmgMultiplier;
@@ -451,11 +373,6 @@ public class Player : Character {
         justOnceDisablePlayerBody = false;
         jsutOnceInstantiateGameOverPanel = false;
         StartCoroutine(PlayerDieAnim(1.0f));
-        //DisplayGameOverPanel();
-        //IsAlive = false;
-        //stateUI.OnDeath();
-        //base.OnDeath();
-        //gameObject.SetActive(false);
     }
     void DisplayGameOverPanel()
     {
@@ -468,7 +385,6 @@ public class Player : Character {
             {
                 stateUI.EnabledGameOverPanel();
                 stateUI.doesPlayerAlreayUseOneLife = true;
-                //GetComponent<PlayerCombatV1>().enabled = false;
             }
             else if (inventory.Life == 0)
             {
@@ -482,7 +398,6 @@ public class Player : Character {
                 stateUI.EnableWatchAdvertissementPanel();
                 GetInventory().AddLife(1);
                 stateUI.doesPlayerAlreayUseOneLife = true;
-                //GetComponent<PlayerCombatV1>().enabled = false;
             }
             else
             {
@@ -495,16 +410,11 @@ public class Player : Character {
     {
         gameFinishPanel = Resources.Load<GameObject>("Prefabs/StateUIs/GameFinishPanel");
         Instantiate(gameFinishPanel, Vector3.zero, Quaternion.identity);
-
-        //hubSaveData.credits = inventory.Credits;
-        //stats.SetHP(SaveSystem.LoadStats().maxHP);
-        //SaveSystem.Savehubsavedata(hubSaveData);
     }
 
     public IEnumerator PlayerDieAnim(float duration)
     {
         float time = 0.0f;
-        //bool justOnceBossName = false;
         while (time < duration + 2)
         {
             if (time < duration)
@@ -532,10 +442,6 @@ public class Player : Character {
                     DisplayGameOverPanel();
                     jsutOnceInstantiateGameOverPanel = true;
                 }
-
-                //diedAnimKindOfParticle.SetActive(false);
-                //GetComponent<MovementV1>().enabled = true;
-                //GetComponent<PlayerCombatV1>().enabled = true;
             }
             time += Time.deltaTime;
             yield return null;
@@ -549,10 +455,8 @@ public class Player : Character {
             stats.GainEnergy(enemy.GetDrops().energy);
             Instantiate(gainEnergyEffect, transform.position, Quaternion.identity);
         }
-        //inventory.AddCredits(enemy.GetDrops().credits);
         stateUI.Refresh();
         stateUIFixe.Refresh();//addedYohan
-        //stateUIFixe.UpdateCredits();//addedYohan
     }
 
     //stupid code
@@ -579,7 +483,6 @@ public class Player : Character {
     }
 
 
-
     ///////// kim added
     public void AddCredits(int amount)
     {
@@ -598,183 +501,5 @@ public class Player : Character {
 
         BroadcastColorSwitch(1);
     }
-
- 
-
-
-
-    /*
-    int getWeaponIndex(Weapon weapon)
-    {
-
-        Debug.Log("Weapon index compare start-----------------------");
-        for (int x = 0; x < 9; x++)
-        {
-            if (weapon == inventory.Weapons[x])
-            {
-                Debug.Log("subject=" + weapon + "inventory weapon" + x + inventory.Weapons[x] + "Match!!!!!!!!!!!!!!!!");
-                Debug.Log("Weapon index compare end-----------------------");
-                return x;
-            }
-
-            Debug.Log("subject=" + weapon + "inventory weapon" + x + inventory.Weapons[x] + "No Match");
-        }
-        Debug.Log("can`t get weapons index");
-        Debug.Log("Weapon index compare end-----------------------");
-        return 0;
-    }
-    //kim added 
-    void SetAndSaveData(Collider2D col)
-    {
-        // Debug.Log(col.transform.position + "" + autoSaveData + " " + stats.Energy);
-
-        AutoSaveData data = new AutoSaveData(
-            MapManagerObj.GetComponent<MapManager>().phase,
-            getWeaponIndex(playerComb.weapons[0]),
-            getWeaponIndex(playerComb.weapons[1]),
-            playerComb.weapons[0].doesItHavePoisonBullet
-            ,
-            playerComb.doesBonusMineIsActive,
-            playerComb.weapons[0].doesItHaveDoubleShot,
-            MapManagerObj.GetComponent<MapManager>().enemyDeadCount
-            , stats.Energy
-            , stats.HP, stateUI.doesPlayerAlreayUseOneLife
-            ,
-            inventory.Life,
-            inventory.Credits
-            );
-
-        SaveSystem.SaveAutoSaveData(data);
-        hubSaveData.credits = inventory.Credits;//temp
-        SaveSystem.Savehubsavedata(hubSaveData);//temp
-       // Debug.Log("auto save point reached. autosaved. phase=" + data.phase);
-
-
-    }
-    void LoadAndSetPlayer(AutoSaveData data)
-    {
-
-        //1. set player position DONE
-
-        GameObject spawnarea = GameObject.Find("playerSpawnphase" + (data.phase + 1).ToString()); ;
-
-        transform.position = spawnarea.transform.position;
-
-        // set enemy deadcount DONE
-        
-        MapManagerObj.GetComponent<MapManager>().enemyDeadCount = data.deadcount;
-       // Debug.Log("EnemyDeadCount="+data.deadcount);
-       // Debug.Log(MapManagerObj.GetComponent<MapManager>().enemyDeadCount);
-
-
-        // set weapons DONE
-        Weapon unusedparameter = inventory.Weapons[1];
-        Debug.Log("weapon1index=" + data.weapon1index);
-        OnChooseWeapon(data.weapon1index, unusedparameter);
-        OnChooseWeapon2(data.weapon2index, unusedparameter);
-
-
-
-        // set powerups (mostly bools) DONE
-        if (data.MinePowerUp)
-        {
-            playerComb.doesBonusMineIsActive = true;
-
-        }
-        if (data.PoisonPowerUp)
-        {
-            playerComb.weapons[0].doesItHavePoisonBullet = true;
-        }
-        if (data.doubleShot)
-        {
-            playerComb.weapons[0].doesItHaveDoubleShot = true;
-        }
-
-        stats.SetHP(SaveSystem.LoadAutoSaveData().currenthp);
-
-        // set energy DONE
-        stats.setEnergy(data.eng);
-        //Debug.Log("Savefile energy=" + data.eng + "current energy=" + stats.Energy);
-       // Debug.Log("PlayerDataLoaded");
-
-
-
-
-    }
-    private void CreateAutoSaveData()
-    {
-        autoSaveData = new AutoSaveData(0, 0, 0, false, false,false, 0, 0, SaveSystem.LoadStats().HP,false,0,0);
-        SaveSystem.SaveAutoSaveData(autoSaveData);
-        //LoadAndSetPlayer(autoSaveData);
-        Debug.Log("created new autosave data");
-        //Debug.Log("save file doesn`t exist, created new savedata");
-    }*/
-    //----------------------------------------
-    // these 3 methods are duplicate from playercombatv1.
-    // 
-    //----------------------------------------
-    //void ActivateWeapon2(Weapon weapon2)
-    //{
-    //    weapon2.Init(this, singleSocket2);
-    //    AddWeapon(weapon2);
-    //    ActivateAllWeapons(weapon2);
-    //}
-    //public void OnChooseWeapon(int index, Weapon weapon) //note from dohan- unused parameter (Weapon weapon)
-    //{
-    //    switch (index)
-    //    {
-    //        case 8:
-    //            playerComb.weapons[0] = inventory.Weapons[8];//TripleSingleShooter
-    //            ActivateWeapon(inventory.Weapons[8]);
-    //            break;
-    //        case 3:
-    //            playerComb.weapons[0] = inventory.Weapons[3];//Rifle
-    //            ActivateWeapon(inventory.Weapons[3]);
-    //            break;
-    //        case 2:
-    //            //ShotGun
-    //            ActivateWeapon(inventory.Weapons[2]);
-    //            break;
-    //        //case 0:
-    //        //    playerComb.weapons[0] = inventory.Weapons[0];//ShotGun
-    //        //    ActivateWeapon(playerComb.weapons[0]);
-    //        //    break;
-    //        default:
-    //            Debug.Log("weapon index not matching onchooseWeapon index");
-    //            break;
-
-
-    //    }
-
-    //}
-    //public void OnChooseWeapon2(int index, Weapon weapon)
-    //{
-    //    switch (index)
-    //    {
-    //        case 4:
-    //            playerComb.weapons[1] = new TheMiddleFingerGun() /*inventory.Weapons[4]*/;//TheMiddleFingerGun
-    //            ActivateWeapon2(/*playerComb.weapons[1]*/new TheMiddleFingerGun());
-    //            break;
-    //        case 5:
-    //            playerComb.weapons[1] = new TheEraser() /*inventory.Weapons[5]*/;//TheEraser
-    //            ActivateWeapon2(new TheEraser());
-
-    //            GetStats().ModifySpeed(-1.0f);
-    //            break;
-    //        case 9:
-    //            playerComb.weapons[1] = new LaserSurgeryGun()/*inventory.Weapons[9]*/;//LaserSurgeryGun
-    //            ActivateWeapon2(new LaserSurgeryGun());
-    //            break;
-    //        default:
-    //            Debug.Log("weapon index not matching onchooseWeapon index");
-    //            break;
-    //    }
-
-    //}
-    //public void setStats(Stats newStats){
-    //    stats=newStats;
-
-    //}
-
 
 }

@@ -21,7 +21,6 @@ public class Stage1MapManager : MapManager
     public List<GameObject> enemyInTheArea = new List<GameObject>();
 
     public GameObject permanentWall;//get an invisible wall permanent wall wich prevent the player from going back to the village
-    //public int enemyDeadCount;//this variable count the number of enemy dead in the map 
 
     GameObject tutorialUI;
     GameObject fingerColor;
@@ -45,7 +44,8 @@ public class Stage1MapManager : MapManager
     {
         base.Start();
 
-
+        //////will be uncomented when the save system will be enabled
+        
         //if (File.Exists(Application.dataPath + "/savedata/autoSaveData.test"))
         //{
         //    phase = SaveSystem.LoadAutoSaveData().phase;
@@ -54,6 +54,7 @@ public class Stage1MapManager : MapManager
         //else phase = 0;
         //if (phase < 0) phase = 0;
 
+        /////
 
         FindObjectOfType<AudioManager>().Play("MainBgm");
         phase = 0;
@@ -64,10 +65,11 @@ public class Stage1MapManager : MapManager
         OnLoadPrefab(4, "MuscularMeleeAttack"); 
         OnLoadPrefab(5, "Blue/FourHandsBoss");
         bossNameUI = GameObject.Find("TransitionAnimationUI").transform.Find("BossName").gameObject;
-        //OnLoadPrefab(3, "Tutorial/FireBrunch");
 
         dropedEnergy = 5;
         dropedCredits = 10;
+
+        //////will be uncomented when the save system will be enabled
 
         //int phaseoffset;
         //if (File.Exists(Application.dataPath + "/savedata/autoSaveData.test"))
@@ -77,7 +79,8 @@ public class Stage1MapManager : MapManager
         //      );
 
         //}
-
+        ////
+        ///
         //change hair sprite of the player according to wich stage he is playing here
 
         miniStageExit = GameObject.Find("MiniStageExit");
@@ -86,16 +89,12 @@ public class Stage1MapManager : MapManager
     
     void Update()
     {
-        //Log.log("phase " +phase);
-        //Log.log("enemyarraycount "+ enemyArray.Count);
-        //Log.log("dead count  " + enemyDeadCount);
         if (enemyArray.Count == enemyDeadCount)
         {
             if (phase != 0)
             {
                 miniStageExit.transform.position = 
                     miniStageExitGroup[phase - 1].transform.position;
-                //phaseWalls[phase - 1].SetActive(false);
             }
         }
     }
@@ -108,15 +107,12 @@ public class Stage1MapManager : MapManager
                 break;
 
             case 0://Area1
-
-
                 for (int i = 0; i < 2; i++)
                 {
                     SpawnEnemyStage1(0, spawnerPoints[0].position + new Vector3(3.0f * i, 0.0f, 0.0f));
                     SpawnEnemyStage1(0, spawnerPoints[1].position + new Vector3(3.0f * i, 0.0f, 0.0f));
                     SpawnEnemyStage1(0, spawnerPoints[2].position + new Vector3(3.0f * i, 0.0f, 0.0f));
                 }
-
                 MoveTriggerZoneToTheNextPosition(0);
                 break;
             case 1://Area2
@@ -133,7 +129,6 @@ public class Stage1MapManager : MapManager
                     SpawnEnemyDistanceShoot(1, spawnerPoints[4].position +
                         new Vector3(2.0f * i, 0.0f, 0.0f));
                 }
-
                 
                 SpawnEnemyStage1(0, spawnerPoints[3].position +
                     new Vector3(2.0f, 0.0f, 0.0f));
@@ -170,12 +165,7 @@ public class Stage1MapManager : MapManager
 
                 }
 
-                    //for (int i = 0; i < 2; i++)
-                    //{
-                    //    SpawnEnemyDistanceShoot(1, spawnerPoints[4].position);
-                    //    SpawnEnemyDistanceShoot(1, spawnerPoints[5].position);
-                    //}
-                    MoveTriggerZoneToTheNextPosition(3);
+                 MoveTriggerZoneToTheNextPosition(3);
                 break;
             case 4://Area5
                 for (int i = 0; i < 2; i++)
@@ -201,7 +191,6 @@ public class Stage1MapManager : MapManager
 
                 for (int i = 0; i < 4; i++)
                 {
-                    //SpawnEnemyTutorialHightHP(0, spawnerPoints[9].position);
                     SpawnEnemyStage1(0, spawnerPoints[13].position);
                    
                 }
@@ -215,12 +204,7 @@ public class Stage1MapManager : MapManager
 
             case 7://Area8
 
-                //for (int i = 0; i < 2; i++)
-                //{
-                    SpawnMuscularEnemy(4, spawnerPoints[15].position + new Vector3(2.0f , 0.0f, 0.0f));
-                    //SpawnEnemyStage1HightHP(2, spawnerPoints[16].position + new Vector3(2.0f * i, 0.0f, 0.0f));
-                //}
-
+                SpawnMuscularEnemy(4, spawnerPoints[15].position + new Vector3(2.0f , 0.0f, 0.0f));
                 MoveTriggerZoneToTheNextPosition(7);
                 break;
             case 8://Area9
@@ -241,50 +225,6 @@ public class Stage1MapManager : MapManager
 
                 MoveTriggerZoneToTheNextPosition(9);
                 break;
-            
-            //case 10://Area11
-
-            //    for (int i = 0; i < 6; i++)
-            //    {
-            //        //SpawnEnemyTutorialHightHP(0, spawnerPoints[15].position + new Vector3(i, 0.0f, 0.0f));
-            //    }
-            //    for (int i = 0; i < 3; i++)
-            //    {
-            //        SpawnEnemyDistanceShoot(1, spawnerPoints[16].position);
-            //        SpawnEnemyDistanceShoot(1, spawnerPoints[17].position);
-            //    }
-
-            //    MoveTriggerZoneToTheNextPosition(10);
-            //    break;
-
-            //case 11://Area12
-
-            //    for (int i = 0; i < 6; i++)
-            //    {
-            //        //SpawnEnemyTutorialHightHP(0, spawnerPoints[18].position + new Vector3(i, 0.0f, 0.0f));
-            //    }
-            //    for (int i = 0; i < 3; i++)
-            //    {
-            //        SpawnEnemyDistanceShoot(1, spawnerPoints[19].position);
-            //        SpawnEnemyDistanceShoot(1, spawnerPoints[20].position);
-            //    }
-
-            //    MoveTriggerZoneToTheNextPosition(11);
-            //    break;
-            //case 12://Area13
-            //    FindObjectOfType<AudioManager>().Pause("TutorialMainBGM");
-            //    FindObjectOfType<AudioManager>().Play("FireBrunchBGM");
-            //    //SpawnTutorialBoss(2, spawnerPoints[21].position);
-            //    StartCoroutine(PresentBoss(5.0f));
-            //    triggerZone.SetActive(false);
-            //    //MoveTriggerZoneToTheNextPosition(12);
-            //    break;
-            //case 13://Area14
-
-
-
-            //    //MoveTriggerZoneToTheNextPosition(13);
-            //    break;
         }
 
     }
@@ -355,8 +295,7 @@ public class Stage1MapManager : MapManager
     }
     void SpawnEnemyRoundOnHand(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
-        enemyScale = new Vector3(/*meleeAttackEnemyScale*/2f, 2f/*meleeAttackEnemyScale*/, 1.0f);
+        enemyScale = new Vector3(2f, 2f, 1.0f);
         enemyAttack = att;
         enemySpeed = 4.0f;
         enemyMaxHP = 100;
@@ -368,8 +307,7 @@ public class Stage1MapManager : MapManager
     }
     void SpawnEnemyStage1(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
-        enemyScale = new Vector3(/*meleeAttackEnemyScale*/1.5f, 1.5f/*meleeAttackEnemyScale*/, 1.0f);
+        enemyScale = new Vector3(1.5f, 1.5f, 1.0f);
         enemyAttack = att;
         enemySpeed = 4.0f;
         enemyMaxHP = 20;
@@ -382,8 +320,7 @@ public class Stage1MapManager : MapManager
     }
     void SpawnEnemyDistanceShoot(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
-        enemyScale = new Vector3(/*meleeAttackEnemyScale*/1.5f, 1.5f/*meleeAttackEnemyScale*/, 1.0f);
+        enemyScale = new Vector3(1.5f, 1.5f, 1.0f);
         enemyAttack = att;
         enemySpeed = 1.0f;
         enemyMaxHP = 20;
@@ -395,8 +332,7 @@ public class Stage1MapManager : MapManager
     }
     void SpawnEnemyDistanceMultiColorShoot(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
-        enemyScale = new Vector3(/*meleeAttackEnemyScale*/1.5f, 1.5f/*meleeAttackEnemyScale*/, 1.0f);
+        enemyScale = new Vector3(1.5f, 1.5f, 1.0f);
         enemyAttack = att;
         enemySpeed = 1.0f;
         enemyMaxHP = 20;
@@ -408,7 +344,6 @@ public class Stage1MapManager : MapManager
     }
     void SpawnEnemyStage1HightHP(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
         enemyScale = new Vector3(2.0f, 2.0f, 1.0f);
         enemyAttack = 4;
         enemySpeed = 4.0f;
@@ -421,7 +356,6 @@ public class Stage1MapManager : MapManager
     }
     void SpawnMuscularEnemy(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
         enemyScale = new Vector3(4.0f, 4.0f, 1.0f);
 
         enemyAttack = 4;
@@ -435,7 +369,6 @@ public class Stage1MapManager : MapManager
     }
     void SpawnStage1Boss(int i, Vector3 pos)
     {
-        //ChooseARandomStrengthForEnemy();
         enemyScale = new Vector3(3.0f, 3.0f, 1.0f);
         enemyAttack = 1;
         enemySpeed = 4.0f;

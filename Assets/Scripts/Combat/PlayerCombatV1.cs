@@ -9,84 +9,72 @@ Simple auto aim combat module
 public class PlayerCombatV1 : MonoBehaviour, ICombat
 {
 
-    //imported code
-
-    //public List<GameObject> targetList;
-    //public List<GameObject> targetListFX;
-
     public GameObject targetFX;
     public bool pressRandomChooseWeaponJustOnce;
     public bool isMeleeModeActivate = false;
+    public bool doesBonusMineIsActive = false;
     public Weapon[] weapons;
+    public GameObject[] meleeModeEffects;
+
     bool isTalking;
     bool isAiming;
     bool justOnce;
     bool justOnceMine;
     bool justOnceSound;//for sound
     bool meleeMode;
-    public bool doesBonusMineIsActive = false;
+   
+
     float timer;
     float dist;
+    float fullCharge = 1.0f;
+    float charge;
+    float charge2;
+    float reloadCountdown;
+    float meleeModeReloadTouchTimer;
 
     Inventory inventory;
     Player playerScript;
-    //GameObject targetFX2;//temp
 
     Transform[] originSocket;
     Transform[] singleSocket;
     Transform[] singleSocket2;
     Transform[] dualWieldSockets;
 
-    //
-
-
     GameManager gm;
-    float fullCharge = 1.0f;
-    float charge;
-    float charge2;
+   
     GameObject target;
     GameObject targe2;
     ICharacter character;
     ICharacter aimedTarget;
     IInputModule input;
-    //Weapon weapon;
-    //Weapon weapon2;
     Weapon originWeapon;
     Vector3 aimDir;
     Vector3 fingerPos;
 
     int shotCount;
     int bonusIndex;
-
-    float reloadCountdown;
-    float meleeModeReloadTouchTimer;
+    int meleeModeImpactIndex;
+    int activeWeapNo = 0;
+    int originAttAmount;
 
     CameraControl cameraControl;
 
     GameObject basicTarget;
     GameObject targetIcone;
-
     GameObject meleeModeHands;
     GameObject hand1Obj;
     GameObject hand2Obj;
+
     GameObject[] meleeModeImpactEffects;
-    public GameObject[] meleeModeEffects;
-    int meleeModeImpactIndex;
-
-    int activeWeapNo = 0;
-
-    int originAttAmount;
+    
     public void Init(ICharacter character)
     {
-
         gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
         playerScript = GetComponent<Player>();
         this.character = character;
         input = character.GetInputModule();
         weapons = new Weapon[2];
-
         inventory = character.GetInventory();
-        //character.OnWeaponChange += OnWeaponChange;
         aimDir = Vector3.down;
 
         var weaponSocket1 = transform.Find("Hand1");
@@ -114,18 +102,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
 
     public void Update()
     {
-        //Debug.Log("layer " + gameObject.layer);
-        //weapons[1] = new TheEraser();
-        //ActivateWeapon(new Shotgun());
-        //ActivateWeapon2(weapons[1]);
-
-        //doesBonusMineIsActive = true;
-        //Log.log("poison " + weapon.GetBullet().GetComponent<StraightShotBullet>().doesPoisonedBulletIsActivate);
-        //Log.log("" + weapon.doesDoubleShotIsActivate);
-        //character.GetStats().GainEnergy(50);
-        //Log.log("active weapon " + weapons[0]);
-        //Log.log("active weapon 2 " + weapons[1]);
-        //        Log.log("weapon name " + character.GetActiveWeapon().sprite.name);
 
         //check if the melee mode is active or not
         if (meleeMode == true)
@@ -135,14 +111,12 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
             if (meleeModeReloadTouchTimer > 0.3f)
             {
                 TeleportOnTouchPositionAndShoot(character.GetActiveWeapon());
-
             }
             LooseEnergy();
         }
         else
         {
             AttackWithWeapon();
-
             if (doesBonusMineIsActive == true)
             {
                 OnShootMines();
@@ -163,14 +137,13 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
                 isMeleeModeActivate = true;
                 originAttAmount = character.GetStats().Attack;
                 character.GetStats().SetAttack(100);
-                //this.character.GetStats().GainEnergy(100);//temp
                 originWeapon = this.character.GetActiveWeapon();
                 originSocket = this.character.GetActiveWeapon().sockets;
                 Log.log("om basic weapon " + originWeapon.ToString());
 
                 character.ActivateWeapon(inventory.Weapons[7]);
                 weapons[0]= this.character.GetActiveWeapon();
-                //
+               
                 playerScript.isInvincible = true;
 
                 hand1Obj.SetActive(false);
@@ -242,7 +215,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
 
     void AttackWithWeapon()
     {
-        //character.GetStats().SetAttack(2);
         if (character.ActivateAutoAim == true)
         {
             var closest = FindClosest();
@@ -252,14 +224,11 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
                 target = FindClosest();
                 targetIcone.SetActive(true);
                 UpdateTaregtEffect();
-                //Log.log("target " + FindClosest().name);
             }
         }
         if (target == null)
         {
-            //Destroy(targetIcone);
             targetIcone.SetActive(false);
-
         }
         Aim();
 
@@ -268,7 +237,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
         {
             ShootWithSecondWeapon();
         }
-
     }
 
 
@@ -277,7 +245,7 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
         if (target != null)
         {
             dist = Vector3.Distance(transform.position, target.transform.position);
-                if (dist < weapons[0].range /*&& target.tag != "NotAimable"*/)
+                if (dist < weapons[0].range )
                 {
                     if (weapons[0].IsReloading)
                     {
@@ -299,8 +267,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
                         ChooseWichSoundShouldBePlayed();
                         charge = 0;
                     }
-                        
-                        
                     }
                 }
         }
@@ -311,7 +277,7 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
         {
             dist = Vector3.Distance(transform.position, target.transform.position);
             
-                if (dist < weapons[1].range /*&& target.tag != "NotAimable"*/)
+                if (dist < weapons[1].range)
                 {
                     if (weapons[1].IsReloading)
                     {
@@ -434,9 +400,7 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
             screenPos.z = 10.0f;
             // convert mouse position to world space
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-            RaycastHit2D hit = Physics2D.Raycast(worldPos, worldPos/*, Vector3.Distance(transform.position,
-               -lr.transform.position +
-               Owner.GetGameObject().transform.position), layerMask*/);
+            RaycastHit2D hit = Physics2D.Raycast(worldPos, worldPos);
             Debug.DrawRay(worldPos, worldPos);
             Log.log("coll name " + hit.collider.name);
             if (hit.collider.name == "Tilemap" || hit.collider.name == "Tilemap (1)")
@@ -462,33 +426,14 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
                 meleeModeHands.SetActive(true);
                 ChooseWichSoundShouldBePlayed();
 
-                //var effect = gm.WorldColor == Colors.Brown ? runSmokeEffect : runSmokeEffectOrange;
                 meleeModeImpactEffects[meleeModeImpactIndex % 2].transform.position = transform.position;
                 meleeModeImpactEffects[meleeModeImpactIndex % 2].SetActive(true);
                 meleeModeImpactIndex++;
-                //timerSmoke = 0;
                 meleeModeImpactEffects[meleeModeImpactIndex % 2].SetActive(false);
                 meleeModeImpactEffects[meleeModeImpactIndex % 2].SetActive(false);
             }
         }
     }
-    void CheckIfGrid(Vector3 worldPos)
-    {
-
-
-    }
-    //void OnWeaponChange(Weapon weapon)
-    //{
-    //    this.weapon = weapon;
-    //    foreach (Transform t in weapon.sockets)
-    //    {
-    //        t.right = aimDir;
-    //        if (t.localEulerAngles.y != 0)
-    //        {
-    //            t.localEulerAngles = new Vector3(0, 0, 180.0f);
-    //        }
-    //    }
-    //}
 
     public Vector3 GetAimDirection()
     {
@@ -520,37 +465,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
             }
         }
     }
-
-    //yohan added
-    //public void ChooseRandomWeapon()
-    //{
-    //    //if (pressRandomChooseWeaponJustOnce == false)
-    //    //{
-    //        bonusIndex = Random.Range(1, 3);
-    //        TierRandomNumber(bonusIndex);
-    //        Log.log("bonus index" +bonusIndex);
-    //        //weapon.GetBullet().doesPoisonedBulletIsActivate = true;
-    //        //originWeapon = character.GetActiveWeapon();
-
-    //        //int rnd = Random.Range(0, character.GetInventory().Weapons.Count);
-
-    //        //character.ActivateWeapon(character.GetInventory().Weapons[rnd]);
-
-    //        //while (originWeapon == character.GetActiveWeapon())
-    //        //{
-    //        //    rnd = Random.Range(0, character.GetInventory().Weapons.Count);
-    //        //    character.ActivateWeapon(character.GetInventory().Weapons[rnd]);
-    //        //    if (originWeapon != character.GetActiveWeapon())
-    //        //    {
-    //        //        break;
-    //        //    }
-    //        //}
-
-
-    //        //character.ActivateWeapon(character.GetInventory().Weapons[rnd]);
-    //        pressRandomChooseWeaponJustOnce = true;
-    //    //}
-    //}
 
     public void TierRandomNumber(int tierIndex, int index)
     {
@@ -608,17 +522,17 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
         switch (index)
         {
             case 1:
-                weapons[1] = new TheMiddleFingerGun() /*inventory.Weapons[4]*/;//TheMiddleFingerGun
+                weapons[1] = new TheMiddleFingerGun() ;//TheMiddleFingerGun
                 ActivateWeapon2(weapons[1]);
                 break;
             case 2:
-                weapons[1] = new TheEraser() /*inventory.Weapons[5]*/;//TheEraser
+                weapons[1] = new TheEraser() ;//TheEraser
                 ActivateWeapon2(weapons[1]);
 
                 character.GetStats().ModifySpeed(-1.0f);
                 break;
             case 3:
-                weapons[1] = new LaserSurgeryGun()/*inventory.Weapons[9]*/;//LaserSurgeryGun
+                weapons[1] = new LaserSurgeryGun();//LaserSurgeryGun
                 ActivateWeapon2(weapons[1]);
                 break;
             default:
@@ -629,8 +543,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
     }
     void ActivateWeapon(Weapon weapon)
     {
-        //weapon.Init(character, singleSocket);
-        //playerScript.AddWeapon(weapon);
         playerScript.ActivateWeapon(weapon);
     }
     void ActivateWeapon2(Weapon weapon2)
@@ -638,7 +550,6 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
         weapon2.Init(character, singleSocket2);
         playerScript.AddWeapon(weapon2);
         playerScript.ActivateAllWeapons(weapon2);
-        //playerScript.ActivateWeapon2(weapon2);
     }
 
     void OnChooseBonus(int index)
@@ -663,24 +574,9 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
     ///
     /// 
 
+    //will probably be delete
     void OnAimLock(ICharacter character)
     {
-        //aimedTarget = character;
-        Log.log("clicked character is " + character.GetGameObject().name);
-        if (meleeMode == true)
-        {
-            //TeleportOnTouchPosition();
-            //target = character.GetGameObject();
-            //transform.position = target.transform.position;
-            //Shoot();
-        }
-        else
-        {
-            if (character.GetGameObject() != gameObject && character.GetGameObject().tag != "NPCTutorial")
-            {
-                //ChooseTarget(character);
-            }
-        }
     }
     public void Terminate()
     {
@@ -740,76 +636,3 @@ public class PlayerCombatV1 : MonoBehaviour, ICombat
 
     }
 }
-
-
-
-//void AimingFXFollowsTarget()
-//{
-//    if (targetFX != null)
-//    {
-//        if (target == null)
-//        {
-//            //targetListFX.Clear();
-//            Destroy(targetFX2);
-//        }
-//        else
-//        {
-//            if (targetFX2 != null)
-//            {
-//                targetFX2.transform.position = target.transform.position;
-//                //targetListFX[0].transform.position += target.transform.position;
-//            }
-//        }
-//    }
-//}
-//void DisableAim(ICharacter character)
-//{
-//    Destroy(targetFX2);
-//    target = FindClosest();
-//    isAiming = false;
-//    //targetListFX.Clear();
-//    targetList.RemoveAt(1);
-//    targetList.RemoveAt(0);
-//}
-//void ChooseTarget(ICharacter character)
-//{
-//    if (character.GetGameObject().tag != "Player")
-//    {
-//        character.GetGameObject().GetComponent<Ranged1>().isAimedByPlayer = true;
-//        Log.log("aimed by  " + character.GetGameObject().GetComponent<Ranged1>().isAimedByPlayer);
-//        if (targetList.Count == 0)
-//        {
-//            OnFirstAim(character);
-//        }
-//        else if (targetList.Count == 1)
-//        {
-//            targetList.Insert(0, character.GetGameObject());
-//            if (targetList[0] == targetList[1])
-//            {
-//                DisableAim(character);
-//            }
-//            else
-//            {
-//                ChangeTarget(character);
-//            }
-//        }
-//    }
-//}
-//void OnFirstAim(ICharacter character)
-//{
-//    targetList.Add(character.GetGameObject());
-//    target = targetList[0];
-//    targetFX2 = Instantiate(targetFX, target.transform.position, Quaternion.identity);
-//    //targetListFX.Add(targetFX2);
-//    isAiming = true;
-//}
-//void ChangeTarget(ICharacter character)
-//{
-//    Destroy(targetFX2);
-//    targetList.RemoveAt(1);
-//    target = targetList[0];
-//    targetFX2 = Instantiate(targetFX, target.transform.position, Quaternion.identity);
-//    //targetListFX.Insert(0, targetFX2);
-//    //targetListFX.RemoveAt(1);
-//    isAiming = true;
-//}

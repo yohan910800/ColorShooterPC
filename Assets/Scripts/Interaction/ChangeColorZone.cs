@@ -11,13 +11,11 @@ public class ChangeColorZone : MonoBehaviour
     void Start()
     {
         gm = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
-
     }
     void MeleEnemyReScanPath()
     {
         meleeEnemyScript.EnemyScanPath();
     }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.name == "Player")
@@ -26,5 +24,4 @@ public class ChangeColorZone : MonoBehaviour
             MeleEnemyReScanPath();
         }
     }
-  
 }

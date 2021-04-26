@@ -14,15 +14,16 @@ public class LightIntensityController : MonoBehaviour
         intensity = 1f;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        globalLight.intensity += (intensity*0.005f);
+        MakeLightsWink();
+    }
+    void MakeLightsWink()
+    {
+        globalLight.intensity += (intensity * 0.005f);
         if (globalLight.intensity > 1 || globalLight.intensity < 0.5f)
         {
-            intensity *=-1;
+            intensity *= -1;
         }
-        
-        
     }
 }

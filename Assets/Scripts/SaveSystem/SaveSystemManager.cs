@@ -50,7 +50,6 @@ public class SaveSystemManager : MonoBehaviour
     }
     private void Update()
     {
-        //Log.log("data " + data.phase);
         Log.log("just once tutorial rnd btn " + character.GetGameObject().
             GetComponent<Player>().justOnceTutorialRandomBtn);
     }
@@ -62,7 +61,6 @@ public class SaveSystemManager : MonoBehaviour
 
     void SetAndSaveData(Collider2D col)
     {
-        // Debug.Log(col.transform.position + "" + autoSaveData + " " + stats.Energy);
         AutoSaveData data = new AutoSaveData(
             MapManagerObj.GetComponent<MapManager>().phase,
             getWeaponIndex(playerComb.weapons[0]),
@@ -71,7 +69,6 @@ public class SaveSystemManager : MonoBehaviour
             ,
             playerComb.doesBonusMineIsActive,
             playerComb.weapons[0].doesItHaveDoubleShot,
-             //MapManagerObj.GetComponent<MapManager>().enemyDeadCount
              character.GetStats().Energy
             , character.GetStats().HP, character.GetStateUI().doesPlayerAlreayUseOneLife
             ,
@@ -101,15 +98,12 @@ public class SaveSystemManager : MonoBehaviour
 
         // set enemy deadcount DONE
 
-        //MapManagerObj.GetComponent<MapManager>().enemyDeadCount = data.deadcount;
-        // Debug.Log("EnemyDeadCount="+data.deadcount);
-        // Debug.Log(MapManagerObj.GetComponent<MapManager>().enemyDeadCount);
 
         // set weapons DONE
         Weapon unusedparameter = character.GetInventory().Weapons[1];
         Debug.Log("weapon1index=" + data.weapon1index);
         /*playerComb.OnChooseWeapon*/
-        ActivateWeapon(data.weapon1index/*, unusedparameter*/);
+        ActivateWeapon(data.weapon1index);
         playerComb.OnChooseWeapon2(data.weapon2index, unusedparameter);
 
         // set powerups (mostly bools) DONE
@@ -130,7 +124,6 @@ public class SaveSystemManager : MonoBehaviour
         character.GetStats().SetHP(SaveSystem.LoadAutoSaveData().currenthp);
 
         // set energy DONE
-        //character.GetStats().setEnergy(data.eng);
 
         if (data.didThePlayerOverComeTheArea6)
         {
@@ -142,36 +135,25 @@ public class SaveSystemManager : MonoBehaviour
         }
 
         character.GetGameObject().GetComponent<Player>().SetTierNum(data.tierIndex);
-        //Debug.Log("Savefile energy=" + data.eng + "current energy=" + stats.Energy);
         character.GetStats().setEnergy(data.eng);
 
         character.GetGameObject().GetComponent<Player>().meleeBtnPressedForTheFirsTime = true;
-
-        // Debug.Log("PlayerDataLoaded");
     }
-    void ActivateWeapon(int index/*,Weapon weapon*/)
+    void ActivateWeapon(int index)
     {
-        //weapon.Init(character, singleSocket);
-        //playerScript.AddWeapon(weapon);
         character.ActivateWeapon(character.GetInventory().Weapons[index]);
     }
     void ActivateWeapon2(Weapon weapon2)
     {
-        //weapon2.Init(character, singleSocket2);
-        //playerScript.AddWeapon(weapon2);
-        //playerScript.ActivateAllWeapons(weapon2);
     }
     private void CreateAutoSaveData()
     {
-        autoSaveData = new AutoSaveData(0, 0, 0, false, false, false, /*0,*/ 0, SaveSystem.LoadStats().HP, false, 0, 0, false, false, 0, false);
+        autoSaveData = new AutoSaveData(0, 0, 0, false, false, false,  0, SaveSystem.LoadStats().HP, false, 0, 0, false, false, 0, false);
         SaveSystem.SaveAutoSaveData(autoSaveData);
-        //LoadAndSetPlayer(autoSaveData);
         Debug.Log("created new autosave data");
-        //Debug.Log("save file doesn`t exist, created new savedata");
     }
     int getWeaponIndex(Weapon weapon)
     {
-
         Debug.Log("Weapon index compare start-----------------------");
         for (int x = 0; x < 9; x++)
         {
@@ -189,11 +171,8 @@ public class SaveSystemManager : MonoBehaviour
         return 0;
     }
 
-
-
     public void setStats(Stats newStats)
     {
         character.SetStats(newStats);
-
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerStatsManager : MonoBehaviour
 {
-
     /*
     Note 
 
@@ -12,10 +11,12 @@ public class PlayerStatsManager : MonoBehaviour
     it can set player stats.
     upgrade methods are linked to canvas/stats panel/ stats(attack etc)/ stats btn.
     
-    
     */
-    Stats stats;
 
+    //this script will be unused as long as the save system is disabled
+
+    Stats stats;
+    
     private void Start()
     {
         load();
@@ -25,14 +26,12 @@ public class PlayerStatsManager : MonoBehaviour
         if (stats.HP < 100)
         {
             stats.SetMaxHP(100 + amount);
-
         }
         else
         {
             stats.SetMaxHP(stats.HP + amount);
             stats.SetHP(stats.maxHP);
         }
-
         SaveSystem.SaveStats(stats);
     }
     public void UpgradeAttack(int amount)

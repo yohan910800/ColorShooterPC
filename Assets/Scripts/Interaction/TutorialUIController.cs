@@ -5,7 +5,6 @@ using MankindGames;
 using UnityEngine.UI;
 public class TutorialUIController : Interactable
 {
-    MapManager mapManager;
     public GameObject UIelement;
     public GameObject phaseWalls;
     public GameObject useRndUIElement;
@@ -13,6 +12,8 @@ public class TutorialUIController : Interactable
     public GameObject miniStageExitObj;
     public GameObject miniStageExit;
     public GameObject closePhaseWall;
+
+    MapManager mapManager;
     List<GameObject> enemies = new List<GameObject>();
 
     protected override void Start()
@@ -25,21 +26,14 @@ public class TutorialUIController : Interactable
         miniStageExit = GameObject.Find("MiniStageExit");
     }
 
-    private void Update()
-    {
-        //Log.log("array count " + mapManager.enemyArray.Count);
-        //Log.log("enemy dead count" + mapManager.enemyDeadCount);
-    }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        //player.GetStateUI().activeMeleeButtonForTutorial = true;
         if (UIelement.name != "KillenemiesTXT" && gameObject.name == "KillEnemyExplanetion")
         {
             UIelement.SetActive(true);
         }
         if(UIelement.name=="FingerColor"&& gameObject.name == "FingerColor")
         {
-            //UIelement.SetActive(true);
         }
         if ( gameObject.name == "ChooseRNDWeaponExplanetion")
         {
@@ -55,19 +49,10 @@ public class TutorialUIController : Interactable
             UIelement.SetActive(true);
         }
 
-            //if (gameObject.name == "Blue/CyanExplanetion")
-            //{
-            //    GameObject.Find("TriggerTutoriialGroup"). transform.GetChild(2)
-            //        .gameObject.SetActive(false);
-            //}
-
-            Log.log("name of the trigger  " + gameObject.name);
+        Log.log("name of the trigger  " + gameObject.name);
     }
     void OnTriggerStay2D(Collider2D collision)
     {
-        //Log.log("enemicount" + mapManager.enemyArray.Count);
-        //Log.log("enemi dead count " + mapManager.enemyDeadCount);
-        //Log.log("name of the trigger  " + gameObject.name);
 
         switch (gameObject.name)
         {
@@ -90,17 +75,14 @@ public class TutorialUIController : Interactable
                         useRndUIElement.SetActive(false);
                         if (player.GetActiveWeapon().ToString() != "SingleShooter32x32")
                         {
-                            //phaseWalls.SetActive(false);
                             miniStageExit.transform.position=
                                 miniStageExitObj.transform.position;
 
                             useRndUIElement.SetActive(false);
                             UIelement.SetActive(false);
                         }
-                        //UIelement.SetActive(false);
                         GameObject.Find("TriggerTutoriialGroup").transform.GetChild(7)
                        .gameObject.SetActive(true);
-                        //gameObject.SetActive(false);
                     }
                 }
                 break;
@@ -108,40 +90,31 @@ public class TutorialUIController : Interactable
 
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                     UIelement.SetActive(false);
                 }
-
                 break;
             case "Blue/CyanExplanetion":
-                //UIelement.SetActive(true);
                 if (mapManager.phase >4)
                 {
                     UIelement.SetActive(false);
                 }
                 break;
             case "FingerColorBlue/CyanZone":
-
                 UIelement.SetActive(true);
-
                 break;
            
             
             case "Red/GreyExplanetion":
 
-                //UIelement.SetActive(true);
                 if (mapManager.gm.WorldColor != Colors.Brown)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                     UIelement.SetActive(false);
                 }
-
                 break;
-
 
             case "StopTimeTrigger":
 
@@ -174,9 +147,6 @@ public class TutorialUIController : Interactable
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
 
-                    //stopTimeUIElement.SetActive(true);
-
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                     UIelement.SetActive(false);
@@ -185,11 +155,9 @@ public class TutorialUIController : Interactable
 
                 break;
             case "KillEnemyExplanetion4":
-                if (mapManager.enemyDeadCount == 26/*mapManager.enemyDeadCount*/||
+                if (mapManager.enemyDeadCount == 26||
                     mapManager.enemyDeadCount == 11|| mapManager.enemyDeadCount == 6)
                 {
-                    //phaseWalls.SetActive(false);
-
                     if (mapManager.enemyDeadCount != 0)
                     {
                         miniStageExit.transform.position =
@@ -204,7 +172,6 @@ public class TutorialUIController : Interactable
             case "KillEnemyExplanetion5":
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                 }
@@ -217,20 +184,17 @@ public class TutorialUIController : Interactable
             case "KillEnemyExplanetion6":
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                 }
                 else
                 {
                     phaseWalls.SetActive(true);
-
                 }
                 break;
             case "KillEnemyExplanetion7":
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                 }
@@ -243,7 +207,6 @@ public class TutorialUIController : Interactable
             case "KillEnemyExplanetion8":
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                 }
@@ -256,14 +219,12 @@ public class TutorialUIController : Interactable
             case "KillEnemyExplanetion9":
                 if (mapManager.enemyArray.Count == mapManager.enemyDeadCount)
                 {
-                    //phaseWalls.SetActive(false);
                     miniStageExit.transform.position =
                                 miniStageExitObj.transform.position;
                 }
                 else
                 {
                     phaseWalls.SetActive(true);
-
                 }
                 break;
         }
@@ -288,10 +249,8 @@ public class TutorialUIController : Interactable
             case "FingerColor":
                 UIelement.SetActive(false);
                 break;
-
             case "KillenemiesTXT":
                 break;
-
             case "BlueCyanExplanationTXT":
                 UIelement.SetActive(false);
                 break;
@@ -299,8 +258,6 @@ public class TutorialUIController : Interactable
                 UIelement.SetActive(false);
                 useRndUIElement.SetActive(false);
                 break;
-
-
             case "RedGreyExplanationTXT":
                 if (mapManager.gm.WorldColor != Colors.Brown)
                 {
@@ -316,7 +273,6 @@ public class TutorialUIController : Interactable
             {
                 UIelement.SetActive(false);
             }
-
         }
 
         else if (UIelement.name == "KillenemiesTXT" 
@@ -327,7 +283,6 @@ public class TutorialUIController : Interactable
                 UIelement.SetActive(false);
              }
         }
-       
         else if (UIelement.name == "KillenemiesTXT" && gameObject.name == "KillEnemyExplanetion3")
         {
             if (mapManager.enemyDeadCount == 16)
@@ -336,6 +291,4 @@ public class TutorialUIController : Interactable
             }
         }
     }
-
-    
 }

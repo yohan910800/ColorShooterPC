@@ -8,7 +8,6 @@ using System;
 public class GameManager : MonoBehaviour {
 
     public event Action<Colors> WorldColorChange;
-    
     // Get this from the inspector just for convinience
     public GameObject enemy1Prefab;
     public Color characterRed;
@@ -26,33 +25,28 @@ public class GameManager : MonoBehaviour {
     public Color characterBlack;
     public Color characterPink;
 
-
     public Camera cam;// public yohan added
-    CameraControl cameraControl;
     public Player player;//yohan added public
+
     public bool showDamageText;
     public bool showDialogText=true;//yohan addded
+
+    public Colors WorldColor { get; private set; }
+    // List holding all the active enemies so we can check who is closer
+    public List<ICharacter> ActiveEnemies { get; private set; }
     // To be moved to a ui manager later
     public GameObject menuPanel;
-    bool showingMenu;
-
-    public Colors WorldColor{get; private set;}
-
-    // List holding all the active enemies so we can check who is closer
-    public List<ICharacter>ActiveEnemies {get; private set;}
-
-    // Keeping track of the color index so we dont get an array index error
-    int colorIndex=1;
-
     public bool hasEnemies;
-
     public AudioManager audioManager;
 
+    bool showingMenu;
+    CameraControl cameraControl;
+    // Keeping track of the color index so we dont get an array index error
+    int colorIndex=1;
     int changeColorTriggerIndex;
 
     void Awake(){
         Static.worldColors = new Dictionary<Colors, Color>();
-        //Static.worldColors.Add(Colors.Green,worldGreen);
         Static.worldColors.Add(Colors.Orange,worldOrange);
         Static.worldColors.Add(Colors.Brown,worldBrown);
 
@@ -93,13 +87,10 @@ public class GameManager : MonoBehaviour {
 
         if (player.initiated)
         {
-            //Log.log("HERE"+ cameraControl.transform.position.z);
             cameraControl.SetTarget(player);
-            //Log.log("HERE2" + cameraControl.transform.position.z);
         }
         audioManager = GameObject.Find("Essential").
             transform.Find("AudioManager").gameObject.GetComponent<AudioManager>();
-        //Log.log("START");
     }
 
     void Update(){
@@ -144,20 +135,4 @@ public class GameManager : MonoBehaviour {
         player.OnEnemyDeath(enemy);
         ActiveEnemies.Remove(enemy);
     }
-
-   
-    //public void OpenInventory()
-    //{
-    //    player.inventoryUI.OpenInventory();
-    //}
-
-    //public void ToggleMenu()
-    //{
-    //    showingMenu = !showingMenu;
-    //    menuPanel.SetActive(showingMenu);
-    //    Static.Pause(showingMenu);
-    //    Log.log("Clicked");
-    //}
-
-    
 }

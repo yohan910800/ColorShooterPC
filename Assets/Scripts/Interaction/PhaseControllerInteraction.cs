@@ -18,13 +18,14 @@ public class PhaseControllerInteraction : Interactable
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        //player.GetHit(100);
         mapManager.ActivatePhase(mapManager.phase);
         mapManager.phase++;
-        if (collision.tag == "Player")
-        {
-            //saveSystemManager.OnHitSaveData(collision);
-        }
+        //will be uncoment when we will reactivate the save system
+        //if (collision.tag == "Player")
+        //{
+            
+        //    //saveSystemManager.OnHitSaveData(collision);
+        //}
         
     }
 }
