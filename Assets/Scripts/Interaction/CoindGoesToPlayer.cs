@@ -10,7 +10,6 @@ public class CoindGoesToPlayer : Interactable
     int creditAmount;
     bool justOnceDisableAnimator;
     GameManager gm;
-    // Start is called before the first frame update
     protected override void Start()
     {
         gm = GameObject.Find("Essential").transform.Find("GameManager").GetComponent<GameManager>();
